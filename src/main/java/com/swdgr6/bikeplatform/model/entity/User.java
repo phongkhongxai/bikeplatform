@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 
@@ -56,6 +57,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BikePoint> bikePoints;
+
+    @OneToMany(mappedBy = "user")
+    private List<AccessToken> accessToken;
 
 
 }
