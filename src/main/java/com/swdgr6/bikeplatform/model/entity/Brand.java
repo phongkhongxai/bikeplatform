@@ -29,6 +29,12 @@ public class Brand {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private boolean isDelete;
+
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OilProduct> oidProducts;
+
+    @ManyToMany(mappedBy = "brands")
+    private Set<BikePoint> bikePoints;
 }
