@@ -62,7 +62,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
         String msg = oilProductService.deleteOilProduct(id);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
     @SecurityRequirement(name = "Bear Authentication")

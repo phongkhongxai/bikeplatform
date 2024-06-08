@@ -60,7 +60,7 @@ public class BikeTypeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBikeType(@PathVariable("id") Long id) {
         String msg = bikeTypeService.deleteBikeType(id);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/by-product/{id}")

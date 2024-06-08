@@ -68,7 +68,7 @@ public class PackageController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePackage(@PathVariable("id") Long id) {
         String msg = oilProductPackageService.deletePackage(id);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
 }

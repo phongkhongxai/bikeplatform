@@ -94,7 +94,7 @@ public class BikePointController {
     @PutMapping("/{id}/brand/{bid}")
     public ResponseEntity<?> removeBrandForBikePoint(@PathVariable("id") Long bikePointId, @PathVariable("bid") Long brandId){
         String msg = bikePointService.removeBrandForBikePoint(bikePointId, brandId);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
 }
