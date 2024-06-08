@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/no-auth")
 public class AuthController {
     private AuthService authService;
 
@@ -33,7 +33,7 @@ public class AuthController {
         return  ResponseEntity.ok(token);
     }
 
-    @PostMapping(value = {"/signup", "/register"})
+    @PostMapping("/register")
     public ResponseEntity<String> signup(@Valid @RequestBody SignupDto signupDto){
         String response = authService.signup(signupDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

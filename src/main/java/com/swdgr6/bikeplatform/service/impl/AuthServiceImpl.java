@@ -61,12 +61,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail())
+        User user = userRepository.findByUsernameOrEmail(loginDto.getEmail(), loginDto.getEmail())
                 .orElseThrow(() -> new BikeApiException(HttpStatus.BAD_REQUEST, "User not found"));
         String accessToken = jwtTokenProvider.generateAccessToken(authentication);
         String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
+
+        String fullName = user.getFullName();
 
         revokeRefreshToken(accessToken);
         RefreshToken savedRefreshToken = saveUserRefreshToken(refreshToken);
@@ -77,6 +79,7 @@ public class AuthServiceImpl implements AuthService {
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .fullName(fullName)
                 .build();
     }
 
