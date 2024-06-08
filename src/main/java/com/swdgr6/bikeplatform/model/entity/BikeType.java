@@ -33,8 +33,14 @@ public class BikeType {
     @Column(nullable = false)
     private String oil_capacity;
 
+    @Column(nullable = false)
+    private boolean isDelete = false;
+
     @OneToMany(mappedBy = "bikeType", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vehicle> vehicles;
+
+    @ManyToMany(mappedBy = "bikeTypes", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<OilProduct> oilProducts;
 
 
 }

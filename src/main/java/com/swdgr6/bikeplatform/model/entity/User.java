@@ -1,5 +1,6 @@
 package com.swdgr6.bikeplatform.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
 
     @Column(nullable = false)
@@ -45,6 +47,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "isDelete")
+    private boolean isDelete = false;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -60,6 +65,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<AccessToken> accessToken;
+
 
 
 }

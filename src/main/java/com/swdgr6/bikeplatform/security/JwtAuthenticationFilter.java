@@ -21,21 +21,25 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
+    @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
     private AccessTokenRepository accessTokenRepository;
+    @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider,
-                                   UserDetailsService userDetailsService,
-                                   AccessTokenRepository accessTokenRepository,
-                                   RefreshTokenRepository refreshTokenRepository) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userDetailsService = userDetailsService;
-        this.accessTokenRepository = accessTokenRepository;
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
+//    @Autowired
+//    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider,
+//                                   UserDetailsService userDetailsService,
+//                                   AccessTokenRepository accessTokenRepository,
+//                                   RefreshTokenRepository refreshTokenRepository) {
+//        this.jwtTokenProvider = jwtTokenProvider;
+//        this.userDetailsService = userDetailsService;
+//        this.accessTokenRepository = accessTokenRepository;
+//        this.refreshTokenRepository = refreshTokenRepository;
+//    }
 
     @Override
     public void doFilterInternal(HttpServletRequest request,
