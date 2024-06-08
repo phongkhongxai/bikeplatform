@@ -24,6 +24,9 @@ public class Order {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateOrder;
 
+    @Column(nullable = false)
+    private int changeTimes;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

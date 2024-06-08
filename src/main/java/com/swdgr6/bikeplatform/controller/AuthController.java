@@ -24,11 +24,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/test")
-    public String helloWorld(){
-        return "Hello World";
-    }
-
     @PostMapping(value = {"/login", "/signin"})
     public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody LoginDto loginDto){
         AuthenticationResponse token = authService.login(loginDto);
