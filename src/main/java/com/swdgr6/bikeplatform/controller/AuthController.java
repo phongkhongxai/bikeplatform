@@ -17,12 +17,13 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/no-auth")
 public class AuthController {
+    @Autowired
     private AuthService authService;
 
-    @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+//    @Autowired
+//    public AuthController(AuthService authService) {
+//        this.authService = authService;
+//    }
 
     @PostMapping(value = {"/login", "/signin"})
     public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody LoginDto loginDto){

@@ -34,7 +34,7 @@ public class OilProduct {
     private String oilType;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)

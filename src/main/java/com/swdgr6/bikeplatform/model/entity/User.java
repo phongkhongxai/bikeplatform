@@ -47,6 +47,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "isDelete")
+    private boolean isDelete = false;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -62,6 +65,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<AccessToken> accessToken;
+
 
 
 }

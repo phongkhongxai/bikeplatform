@@ -61,9 +61,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = userRepository.findByUsernameOrEmail(loginDto.getEmail(), loginDto.getEmail())
+        User user = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail())
                 .orElseThrow(() -> new BikeApiException(HttpStatus.BAD_REQUEST, "User not found"));
 
         String accessToken = jwtTokenProvider.generateAccessToken(authentication, user);
