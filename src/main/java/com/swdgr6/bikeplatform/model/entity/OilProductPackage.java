@@ -21,14 +21,23 @@ public class OilProductPackage {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String volume;
+
+    @Column
+    private int changeTimes;
+
+    @Column
+    private int kilometerChange;
 
     @Column(nullable = false)
     private String description;
 
     @Column(name = "total_price", nullable = false)
     private double totalPrice;
+
+    @Column(nullable = false)
+    private boolean isDelete;
 
     @OneToMany(mappedBy = "oilProductPackage", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders;

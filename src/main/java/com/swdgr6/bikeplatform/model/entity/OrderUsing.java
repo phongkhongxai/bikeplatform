@@ -23,18 +23,22 @@ public class OrderUsing {
     @Column(nullable = false)
     private double price;
 
-    @Column(nullable = false)
+    @Column
     private int rating;
 
-    @Column(nullable = false)
+    @Column
     private String feedback;
 
     @Column(nullable = false)
-    private boolean status;
+    private String status;
 
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateUsing;
+
+    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateUpdateUsing;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)

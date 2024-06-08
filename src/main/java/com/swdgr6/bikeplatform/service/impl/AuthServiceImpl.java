@@ -65,8 +65,9 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = userRepository.findByUsernameOrEmail(loginDto.getEmail(), loginDto.getEmail())
                 .orElseThrow(() -> new BikeApiException(HttpStatus.BAD_REQUEST, "User not found"));
-        String accessToken = jwtTokenProvider.generateAccessToken(authentication);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
+
+        String accessToken = jwtTokenProvider.generateAccessToken(authentication, user);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(authentication, user);
 
         String fullName = user.getFullName();
 
@@ -142,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
 
         user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
 
-        Role userRole = roleRepository.findByRoleName("CUSTOMER")
+        Role userRole = roleRepository.findByRoleName("ROLE_CUSTOMER")
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "User Role not found."));
         user.setRole(userRole);
 
@@ -156,23 +157,33 @@ public class AuthServiceImpl implements AuthService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String username;
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return null;
         }
+
         refreshToken = authHeader.substring(7);
         RefreshToken token = refreshTokenRepository.findByToken(refreshToken).orElseThrow();
         username = jwtTokenProvider.getUsernameFromJwt(refreshToken);
+
         if (username != null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (!token.isRevoked() && !token.isExpired()
-//                    && jwtTokenProvider.isTokenValid(refreshToken, userDetails.getUsername())
-            ) {
-                //map user to authentication
+
+            // Fetch the User entity
+            User user = this.userRepository.findByUsernameOrEmail(username, username)
+                    .orElseThrow(() -> new BikeApiException(HttpStatus.BAD_REQUEST, "User not found"));
+
+            if (!token.isRevoked() && !token.isExpired()) {
+                // Map user to authentication
                 Authentication userAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                var accessToken = jwtTokenProvider.generateAccessToken(userAuthentication);
-                User user = this.userRepository.findByUsernameOrEmail(username, username).orElseThrow();
+
+                // Generate access token with user details
+                String accessToken = jwtTokenProvider.generateAccessToken(userAuthentication, user);
+
+                // Revoke previous access tokens and save the new one
                 revokeAllUserAccessTokens(user);
                 saveUserAccessToken(user, accessToken, token);
+
                 return AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)

@@ -27,6 +27,9 @@ public class BikePoint {
     @Column(nullable = false, unique = true)
     private String phone;
 
+    @Column(nullable = false)
+    private boolean isDelete;
+
     @OneToOne(mappedBy = "bikePoint", cascade = CascadeType.ALL, orphanRemoval = true)
     private Wallet wallet;
 
@@ -40,5 +43,11 @@ public class BikePoint {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
+    @ManyToMany
+    @JoinTable(
+            name = "bike_point_brand",
+            joinColumns = @JoinColumn(name = "bikepoint_id"),
+            inverseJoinColumns = @JoinColumn(name = "brand_id")
+    )
+    private Set<Brand> brands;
 }

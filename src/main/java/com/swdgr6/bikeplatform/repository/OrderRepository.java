@@ -1,3 +1,4 @@
+
 package com.swdgr6.bikeplatform.repository;
 
 import com.swdgr6.bikeplatform.model.entity.Order;
@@ -8,3 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
 }
+
