@@ -34,7 +34,7 @@ public class BikeType {
     private String oil_capacity;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     @OneToMany(mappedBy = "bikeType", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vehicle> vehicles;

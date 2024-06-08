@@ -28,7 +28,7 @@ public class BikePoint {
     private String phone;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     @OneToOne(mappedBy = "bikePoint", cascade = CascadeType.ALL, orphanRemoval = true)
     private Wallet wallet;
