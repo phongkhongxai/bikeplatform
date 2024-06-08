@@ -4,7 +4,8 @@ import com.swdgr6.bikeplatform.model.entity.OilProductPackage;
 import com.swdgr6.bikeplatform.model.entity.Order;
 import com.swdgr6.bikeplatform.model.entity.User;
 import com.swdgr6.bikeplatform.model.entity.Vehicle;
-import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
+import com.swdgr6.bikeplatform.model.payload.dto.OrderDTO;
+import com.swdgr6.bikeplatform.model.payload.dto.OrderDTO;
 import com.swdgr6.bikeplatform.repository.OilProductPackageRepository;
 import com.swdgr6.bikeplatform.repository.OrderRepository;
 import com.swdgr6.bikeplatform.repository.UserRepository;
@@ -31,12 +32,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OilProductPackageRepository oilProductPackageRepository;
 
-    public List<OrderDto> getAllOrders() {
+    public List<OrderDTO> getAllOrders() {
         List<Order> list = orderRepository.findAll();
         return mapOrderToDTO(list);
     }
 
-    public OrderDto createOrder(OrderDto orderDto) {
+    public OrderDTO createOrder(OrderDTO orderDto) {
         Order order = new Order();
         order.setDateOrder(LocalDateTime.now());
 
@@ -58,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
         return maptoDTO(order);
     }
 
-    public OrderDto updateOrder(OrderDto orderDto) {
+    public OrderDTO updateOrder(OrderDTO orderDto) {
         Order order = orderRepository.findExistOrderById(orderDto.getId());
 
         // Fetch associated entities
@@ -91,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         return "Order with id: " + id + " was marked as deleted.";
     }
 
-    public List<OrderDto> searchOrders(String searchTerm) {
+    public List<OrderDTO> searchOrders(String searchTerm) {
         Long searchId;
         try {
             searchId = Long.parseLong(searchTerm);
@@ -105,8 +106,8 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
-    private OrderDto maptoDTO(Order order){
-        OrderDto orderDTO = new OrderDto();
+    private OrderDTO maptoDTO(Order order){
+        OrderDTO orderDTO = new OrderDTO();
         orderDTO.setId(order.getId());
         orderDTO.setDateOrder(order.getDateOrder());
         orderDTO.setUserId(order.getUser().getId());
@@ -115,7 +116,7 @@ public class OrderServiceImpl implements OrderService {
         return orderDTO;
     }
 
-    private List<OrderDto> mapOrderToDTO(List<Order> list){
+    private List<OrderDTO> mapOrderToDTO(List<Order> list){
         return list.stream().map(this::maptoDTO).collect(Collectors.toList());
     }
 }

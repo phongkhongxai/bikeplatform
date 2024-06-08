@@ -1,6 +1,6 @@
 package com.swdgr6.bikeplatform.controller;
 
-import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
+import com.swdgr6.bikeplatform.model.payload.dto.OrderDTO;
 import com.swdgr6.bikeplatform.model.payload.dto.ResponseDTO;
 import com.swdgr6.bikeplatform.model.payload.responeModel.ResponseHandler;
 import com.swdgr6.bikeplatform.service.OrderService;
@@ -26,7 +26,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<ResponseDTO> createOrder(@RequestBody OrderDTO orderDto) {
         try {
             return ResponseHandler.DataResponse(orderService.createOrder(orderDto), "Created successfully");
         } catch (Exception ex) {
@@ -35,7 +35,7 @@ public class OrderController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseDTO> updateOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<ResponseDTO> updateOrder(@RequestBody OrderDTO orderDto) {
         try {
             return ResponseHandler.DataResponse(orderService.updateOrder(orderDto), "Updated successfully");
         } catch (Exception ex) {
@@ -55,7 +55,7 @@ public class OrderController {
     @GetMapping("/search")
     public ResponseEntity<ResponseDTO> searchOrders(@RequestParam String searchTerm) {
         try {
-            List<OrderDto> searchResults = orderService.searchOrders(searchTerm);
+            List<OrderDTO> searchResults = orderService.searchOrders(searchTerm);
             if (searchResults.isEmpty()) {
                 return ResponseHandler.DataResponse(searchResults, "No orders found. They may have been deleted.");
             } else {

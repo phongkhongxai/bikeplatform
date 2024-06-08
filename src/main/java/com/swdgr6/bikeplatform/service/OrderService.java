@@ -1,19 +1,19 @@
 
 package com.swdgr6.bikeplatform.service;
 
-import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
+import com.swdgr6.bikeplatform.model.payload.dto.OrderDTO;
 
 import java.util.List;
 
 public interface OrderService {
-    List<OrderDto> getAllOrders();
+    List<OrderDTO> getAllOrders();
 
-    OrderDto createOrder(OrderDto orderDto);
+    OrderDTO createOrder(OrderDTO orderDto);
 
-    OrderDto updateOrder(OrderDto orderDto);
+    OrderDTO updateOrder(OrderDTO orderDto);
 
     String deleteOrder(Long id);
 
-    List<OrderDto> searchOrders(String searchTerm);
+    List<OrderDTO> searchOrders(String searchTerm);
 }
 
