@@ -1,7 +1,6 @@
 package com.swdgr6.bikeplatform.service.impl;
 
 import com.swdgr6.bikeplatform.model.entity.Order;
-import com.swdgr6.bikeplatform.model.payload.dto.OrderDTO;
 import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
 import com.swdgr6.bikeplatform.repository.OrderRepository;
 import com.swdgr6.bikeplatform.service.OrderService;
