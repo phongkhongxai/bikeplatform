@@ -15,8 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.time.ZoneOffset.UTC;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -38,7 +42,8 @@ public class OrderServiceImpl implements OrderService {
 
     public OrderDto createOrder(OrderDto orderDto) {
         Order order = new Order();
-        order.setDateOrder(LocalDateTime.now());
+        ZonedDateTime zonedDateTime = ZonedDateTime.now( ZoneId.of("UTC+07:00"));
+        order.setDateOrder(zonedDateTime.toLocalDateTime());
 
         // Fetch associated entities
         User user = userRepository.findById(orderDto.getUserId())

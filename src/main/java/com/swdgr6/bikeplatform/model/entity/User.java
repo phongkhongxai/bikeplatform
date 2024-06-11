@@ -38,7 +38,7 @@ public class User {
     @Column(nullable = false)
     private String gender;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false, unique = true)
@@ -47,7 +47,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "isDelete")
+    @Column(nullable = false)
     private boolean isDelete = false;
 
     @ManyToOne

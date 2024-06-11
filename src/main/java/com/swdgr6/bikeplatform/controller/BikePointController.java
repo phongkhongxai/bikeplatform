@@ -17,7 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/bike-point")
+@RequestMapping("/api/v1/bike-points")
 public class BikePointController {
     private BikePointService bikePointService;
     @Autowired
@@ -66,7 +66,7 @@ public class BikePointController {
         return new ResponseEntity<>(bikePointDto, HttpStatus.OK);
     }
     @SecurityRequirement(name = "Bear Authentication")
-    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBikePoint(@PathVariable("id") Long id, @RequestBody BikePointUpdatedRequest bt) {
         BikePointDto bt1 = bikePointService.updateBikePoint(id, bt);
@@ -74,7 +74,7 @@ public class BikePointController {
     }
 
     @SecurityRequirement(name = "Bear Authentication")
-    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBikePoint(@PathVariable("id") Long id) {
         String msg = bikePointService.deleteBikePoint(id);
@@ -82,7 +82,7 @@ public class BikePointController {
     }
 
     @SecurityRequirement(name = "Bear Authentication")
-    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     @PostMapping("/{id}/brand")
     public ResponseEntity<?> addBrandForBikePoint(@PathVariable("id") Long bikePointId, @RequestBody AnyIdsRequest brandIds){
         String msg = bikePointService.addBrandForBikePoint(bikePointId, brandIds.getAnyTypeIds());
@@ -90,11 +90,11 @@ public class BikePointController {
     }
 
     @SecurityRequirement(name = "Bear Authentication")
-    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}/brand/{bid}")
     public ResponseEntity<?> removeBrandForBikePoint(@PathVariable("id") Long bikePointId, @PathVariable("bid") Long brandId){
         String msg = bikePointService.removeBrandForBikePoint(bikePointId, brandId);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
 }

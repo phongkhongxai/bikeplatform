@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/products")
 public class ProductController {
     private OilProductService oilProductService;
 
@@ -62,7 +62,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
         String msg = oilProductService.deleteOilProduct(id);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
     @SecurityRequirement(name = "Bear Authentication")
