@@ -1,7 +1,10 @@
 package com.swdgr6.bikeplatform.repository;
 
 
+import com.swdgr6.bikeplatform.model.entity.Role;
 import com.swdgr6.bikeplatform.model.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -20,4 +23,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users u WHERE u.is_delete = false and u.user_id = :userId", nativeQuery = true)
     User findExistUserById(Long userId);
+
+    @Query("SELECT us FROM User us WHERE us.isDelete = false")
+    Page<User> findAllNotDeleted(Pageable pageable);
+
+    Page<User> findByRoleAndIsDeleteFalse(Role role, Pageable pageable);
 }

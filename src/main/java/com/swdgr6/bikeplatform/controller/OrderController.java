@@ -9,10 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/auth/order")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -21,7 +22,7 @@ public class OrderController {
         try {
             return ResponseHandler.DataResponse(orderService.getAllOrders(), "");
         } catch (Exception ex) {
-            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex,"api/v1/auth/order/all");
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.GET,"api/v1/auth/order/all");
         }
     }
 
@@ -30,7 +31,7 @@ public class OrderController {
         try {
             return ResponseHandler.DataResponse(orderService.createOrder(orderDto), "Created successfully");
         } catch (Exception ex) {
-            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex,"api/v1/auth/order/create");
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.POST , "api/v1/auth/order/create");
         }
     }
 
@@ -39,7 +40,7 @@ public class OrderController {
         try {
             return ResponseHandler.DataResponse(orderService.updateOrder(orderDto), "Updated successfully");
         } catch (Exception ex) {
-            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex,"api/v1/auth/order/update");
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.PUT,"api/v1/auth/order/update");
         }
     }
 
@@ -48,7 +49,7 @@ public class OrderController {
         try {
             return ResponseHandler.DataResponse(orderService.deleteOrder(id), "Deleted successfully");
         } catch (Exception ex) {
-            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex,"api/v1/auth/order/delete");
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.DELETE,"api/v1/auth/order/delete");
         }
     }
 
@@ -62,7 +63,7 @@ public class OrderController {
                 return ResponseHandler.DataResponse(searchResults, "Search completed successfully");
             }
         } catch (Exception ex) {
-            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex,"api/v1/auth/order/search");
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.GET,"api/v1/auth/order/search");
         }
     }
 }

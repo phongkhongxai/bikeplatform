@@ -30,7 +30,7 @@ public class Brand {
     private String address;
 
     @Column(nullable = false)
-    private boolean isDelete = false;
+    private boolean isDelete;
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OilProduct> oidProducts;

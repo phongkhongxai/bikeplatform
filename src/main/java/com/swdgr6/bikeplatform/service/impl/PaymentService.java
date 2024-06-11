@@ -2,7 +2,7 @@ package com.swdgr6.bikeplatform.service.impl;
 
 import com.swdgr6.bikeplatform.config.VNPayConfig;
 import com.swdgr6.bikeplatform.model.payload.dto.PaymentResDTO;
-import com.swdgr6.bikeplatform.util.VNPayUtil;
+import com.swdgr6.bikeplatform.utils.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

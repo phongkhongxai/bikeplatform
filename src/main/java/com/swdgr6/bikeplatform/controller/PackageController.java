@@ -16,7 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/package")
+@RequestMapping("/api/v1/packages")
 public class PackageController {
     private OilProductPackageService oilProductPackageService;
 
