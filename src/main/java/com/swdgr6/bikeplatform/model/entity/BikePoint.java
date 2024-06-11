@@ -24,11 +24,11 @@ public class BikePoint {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     @OneToOne(mappedBy = "bikePoint", cascade = CascadeType.ALL, orphanRemoval = true)
     private Wallet wallet;

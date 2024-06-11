@@ -26,7 +26,7 @@ public class Vehicle {
     private String color;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

@@ -16,7 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/package")
+@RequestMapping("/api/v1/packages")
 public class PackageController {
     private OilProductPackageService oilProductPackageService;
 
@@ -68,7 +68,7 @@ public class PackageController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePackage(@PathVariable("id") Long id) {
         String msg = oilProductPackageService.deletePackage(id);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
 }

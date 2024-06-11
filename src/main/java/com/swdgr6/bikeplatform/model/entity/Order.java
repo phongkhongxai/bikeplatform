@@ -42,8 +42,6 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderUsing> orderUsings;
 
-
-
-
-
+    @Column(name = "isDelete")
+    private boolean isDelete = false;
 }

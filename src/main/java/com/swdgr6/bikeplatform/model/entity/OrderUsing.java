@@ -51,5 +51,5 @@ public class OrderUsing {
     @OneToMany(mappedBy = "orderUsing", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
 
-
+    private boolean isDelete = false;
 }

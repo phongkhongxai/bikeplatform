@@ -37,7 +37,7 @@ public class OilProductPackage {
     private double totalPrice;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     @OneToMany(mappedBy = "oilProductPackage", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders;
