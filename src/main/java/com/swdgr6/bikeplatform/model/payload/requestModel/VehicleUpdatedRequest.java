@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -14,5 +15,7 @@ public class VehicleUpdatedRequest {
     @Pattern(regexp = "^[0-9]{2}[A-Z][0-9]{5,6}$", message = "Plate format should be xxXxxxxxx (e.g: 79N305349)")
     private String plate;
     private String color;
+    private MultipartFile file;
+    private String imageUrl;
     private Long bikeTypeId;
 }

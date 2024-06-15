@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -18,6 +19,8 @@ public class VehicleDto {
     private String plate;
     @NotEmpty(message = "Color should not be empty!")
     private String color;
+    private String imageUrl;
+    private MultipartFile file;
     @NotNull(message = "User ID should not be null!")
     private Long userId;
     @NotNull(message = "User ID should not be null!")

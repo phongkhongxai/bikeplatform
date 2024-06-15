@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -19,5 +20,7 @@ public class OilProductUpdatedRequest {
     private String techStand;
     @Pattern(regexp = "Synthetic|Conventional|Semi-Synthetic", message = "Oil type must be Synthetic, Conventional, or Semi-Synthetic")
     private String oilType;
+    private String imageUrl;
+    private MultipartFile file;
     private Long brandId;
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -17,6 +18,8 @@ public class BikeTypeDto {
     private String brand;
     @NotEmpty(message = "Model should not be empty!")
     private String model;
+    private String imageUrl;
+    private MultipartFile file;
     @NotEmpty(message = "Transmission should not be empty!")
     @Pattern(regexp = "Manual|Automatic|Semi-Automatic", message = "Transmission must be Manual, Automatic, or Semi-Automatic")
     private String transmission;

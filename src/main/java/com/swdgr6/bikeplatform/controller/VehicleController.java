@@ -9,6 +9,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.VehicleResponse;
 import com.swdgr6.bikeplatform.service.VehicleService;
 import com.swdgr6.bikeplatform.utils.AppConstants;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class VehicleController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<?> createVehicle(@RequestBody VehicleDto vehicleDto) {
+    public ResponseEntity<?> createVehicle(@Valid @ModelAttribute VehicleDto vehicleDto) {
         VehicleDto bt = vehicleService.saveVehicle(vehicleDto);
         return new ResponseEntity<>(bt, HttpStatus.CREATED);
     }
@@ -58,7 +59,7 @@ public class VehicleController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateVehicle(@PathVariable("id") Long id, @RequestBody VehicleUpdatedRequest bt) {
+    public ResponseEntity<?> updateVehicle(@PathVariable("id") Long id, @Valid @ModelAttribute VehicleUpdatedRequest bt) {
         VehicleDto bt1 = vehicleService.updateVehicle(id, bt);
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }

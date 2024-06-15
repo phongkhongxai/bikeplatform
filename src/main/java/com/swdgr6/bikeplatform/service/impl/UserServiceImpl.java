@@ -12,6 +12,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.BikePointsResponse;
 import com.swdgr6.bikeplatform.model.payload.responeModel.UsersResponse;
 import com.swdgr6.bikeplatform.repository.RoleRepository;
 import com.swdgr6.bikeplatform.repository.UserRepository;
+import com.swdgr6.bikeplatform.service.CloudinaryService;
 import com.swdgr6.bikeplatform.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
 
     @Override
@@ -56,6 +59,8 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByRoleName("ROLE_ADMIN")
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "User Role not found."));
         user.setRole(userRole);
+        user.setAvatarUrl("default");
+
 
         return modelMapper.map(userRepository.save(user), UserDto.class);
     }
@@ -77,6 +82,7 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByRoleName("ROLE_OWNER")
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "User Role not found."));
         user.setRole(userRole);
+        user.setAvatarUrl("default");
 
         return modelMapper.map(userRepository.save(user), UserDto.class);
     }
@@ -117,6 +123,12 @@ public class UserServiceImpl implements UserService {
         }
         if (userUpdatedRequest.getUsername() != null) {
             existingUser.setUsername(userUpdatedRequest.getUsername());
+        }
+        if(userUpdatedRequest.getFile()!=null){
+            existingUser.setAvatarUrl(cloudinaryService.uploadFile(userUpdatedRequest.getFile(), "bikeplat"));
+        }
+        else{
+            existingUser.setAvatarUrl("default");
         }
         User updatedUser = userRepository.save(existingUser);
         return modelMapper.map(updatedUser, UserDto.class);

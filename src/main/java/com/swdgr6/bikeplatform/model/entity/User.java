@@ -46,6 +46,8 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+    @Column
+    private String avatarUrl;
 
     @Column(nullable = false)
     private boolean isDelete = false;

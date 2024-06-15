@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -26,10 +27,11 @@ public class BikePointDto {
     @NotEmpty(message = "Address should not be empty!")
     @Size(max = 255, message = "Address should not exceed 255 characters!")
     private String address;
-
     @NotEmpty(message = "Phone should not be empty!")
     @Pattern(regexp="(^$|[0-9]{8,11})", message = "Phone number must be 8 or 11 digits!")
     private String phone;
+    private String imageUrl;
+    private MultipartFile file;
     private Long walletId;
     @NotNull(message = "User should not be null!")
     private Long userId;

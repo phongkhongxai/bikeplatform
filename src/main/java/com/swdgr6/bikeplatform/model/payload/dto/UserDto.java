@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -21,5 +22,6 @@ public class UserDto {
     private String gender;
     private String phone;
     private String username;
+    private String avatarUrl;
     private Long roleId;
 }

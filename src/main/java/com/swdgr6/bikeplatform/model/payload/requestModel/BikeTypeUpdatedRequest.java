@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -19,4 +20,7 @@ public class BikeTypeUpdatedRequest {
     private String cylinderCapacity;
     @Pattern(regexp = "^\\d+(\\.\\d)?L$", message = "Oil capacity must be in the format x.xL (e.g., 1.5L, 0.8L)")
     private String oilCapacity;
+    private String imageUrl;
+    private MultipartFile file;
+
 }

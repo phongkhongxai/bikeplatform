@@ -146,6 +146,7 @@ public class AuthServiceImpl implements AuthService {
         Role userRole = roleRepository.findByRoleName("ROLE_CUSTOMER")
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "User Role not found."));
         user.setRole(userRole);
+        user.setAvatarUrl("default");
 
         userRepository.save(user);
 
