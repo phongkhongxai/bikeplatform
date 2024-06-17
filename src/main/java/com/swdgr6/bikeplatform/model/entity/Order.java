@@ -27,6 +27,9 @@ public class Order {
     @Column(nullable = false)
     private int changeTimes;
 
+    @Column(nullable = false)
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
