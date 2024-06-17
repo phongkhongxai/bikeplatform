@@ -41,7 +41,7 @@ public class OrderController {
         try {
             return ResponseHandler.DataResponse(orderService.createOrder(orderDto), "Created successfully");
         } catch (Exception ex) {
-            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.POST , "api/v1/auth/order/create");
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.POST , "api/v1/orders");
         }
     }
 
@@ -56,10 +56,10 @@ public class OrderController {
 
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
-    @PutMapping("/{id}/vehicles/{vehicle_id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateChangeTimeOfOrder(@PathVariable("id") Long id) {
         OrderDto order = orderService.updateChangeTimeOfOrder(id);
-        if (order.getChangeTimes()==0 && !order.getStatus().equalsIgnoreCase("Completed")){
+        if (order.getChangeTimes()==0){
             OrderDto orderDto = orderService.updateStatusOfOrder(id);
             return new ResponseEntity<>(orderDto, HttpStatus.OK);
         }
@@ -87,7 +87,7 @@ public class OrderController {
                 return ResponseHandler.DataResponse(searchResults, "Search completed successfully");
             }
         } catch (Exception ex) {
-            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.GET,"api/v1/auth/order/search");
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.GET,"api/v1/orders/search");
         }
     }
 }

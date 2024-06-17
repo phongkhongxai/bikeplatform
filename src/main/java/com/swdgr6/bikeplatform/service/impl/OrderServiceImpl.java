@@ -140,6 +140,9 @@ public class OrderServiceImpl implements OrderService {
             throw new BikeApiException(HttpStatus.NOT_FOUND, "Order not found with ID: " + id);
         }
         Order existingOrder = orderOptional.get();
+        if(existingOrder.getStatus().equalsIgnoreCase("Completed")){
+            throw new BikeApiException(HttpStatus.NOT_FOUND, "Order already be completed.");
+        }
         existingOrder.setStatus("Completed");
         return modelMapper.map(orderRepository.save(existingOrder),OrderDto.class);
     }
