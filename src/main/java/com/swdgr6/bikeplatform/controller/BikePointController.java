@@ -10,6 +10,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.OilProductsResponse;
 import com.swdgr6.bikeplatform.service.BikePointService;
 import com.swdgr6.bikeplatform.utils.AppConstants;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class BikePointController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<?> createBikePoint(@RequestBody BikePointDto bikePointDto, @RequestParam(value = "accountNumber") String accountNumber, @RequestParam(value = "bankName") String bankName) {
+    public ResponseEntity<?> createBikePoint(@Valid @ModelAttribute BikePointDto bikePointDto, @RequestParam(value = "accountNumber") String accountNumber, @RequestParam(value = "bankName") String bankName) {
         BikePointDto bt = bikePointService.saveBikePoint(bikePointDto, accountNumber, bankName);
         return new ResponseEntity<>(bt, HttpStatus.CREATED);
     }
@@ -68,7 +69,7 @@ public class BikePointController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBikePoint(@PathVariable("id") Long id, @RequestBody BikePointUpdatedRequest bt) {
+    public ResponseEntity<?> updateBikePoint(@PathVariable("id") Long id, @Valid @ModelAttribute BikePointUpdatedRequest bt) {
         BikePointDto bt1 = bikePointService.updateBikePoint(id, bt);
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }

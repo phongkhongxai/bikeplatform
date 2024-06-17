@@ -29,7 +29,7 @@ public class BikeTypeController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<?> createBikeType(@RequestBody BikeTypeDto bikeTypeDto) {
+    public ResponseEntity<?> createBikeType(@Valid @ModelAttribute BikeTypeDto bikeTypeDto) {
         BikeTypeDto bt = bikeTypeService.saveBikeType(bikeTypeDto);
         return new ResponseEntity<>(bt, HttpStatus.CREATED);
     }
@@ -56,7 +56,7 @@ public class BikeTypeController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBikeType(@PathVariable("id") Long id, @RequestBody BikeTypeUpdatedRequest bt) {
+    public ResponseEntity<?> updateBikeType(@PathVariable("id") Long id, @Valid @ModelAttribute BikeTypeUpdatedRequest bt) {
         BikeTypeDto bt1 = bikeTypeService.updateBikeType(id, bt);
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }

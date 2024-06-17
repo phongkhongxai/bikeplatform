@@ -9,6 +9,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.BikePointsResponse;
 import com.swdgr6.bikeplatform.model.payload.responeModel.BikeTypesResponse;
 import com.swdgr6.bikeplatform.repository.*;
 import com.swdgr6.bikeplatform.service.BikePointService;
+import com.swdgr6.bikeplatform.service.CloudinaryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,8 @@ public class BikePointServiceImpl implements BikePointService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Override
     public BikePointDto saveBikePoint(BikePointDto bikePointDto, String accountNumber, String bankName) {
@@ -52,6 +55,11 @@ public class BikePointServiceImpl implements BikePointService {
         wallet.setBankName(bankName);
         bikePoint.setWallet(wallet);
         wallet.setBikePoint(bikePoint);
+        if(bikePointDto.getFile()!=null){
+            bikePoint.setImageUrl(cloudinaryService.uploadFile(bikePointDto.getFile(), "bikeplat"));
+        }else{
+            bikePoint.setImageUrl("default");
+        }
 
         return modelMapper.map(bikePointRepository.save(bikePoint), BikePointDto.class);
     }
@@ -159,6 +167,9 @@ public class BikePointServiceImpl implements BikePointService {
         existingBikePoint.setName(bikePointUpdatedRequest.getName() !=null ? bikePointUpdatedRequest.getName() : existingBikePoint.getName());
         existingBikePoint.setAddress(bikePointUpdatedRequest.getAddress() !=null ? bikePointUpdatedRequest.getAddress() : existingBikePoint.getAddress());
         existingBikePoint.setPhone(bikePointUpdatedRequest.getPhone() !=null ? bikePointUpdatedRequest.getPhone() : existingBikePoint.getPhone());
+        if(bikePointUpdatedRequest.getFile()!=null){
+            existingBikePoint.setImageUrl(cloudinaryService.uploadFile(bikePointUpdatedRequest.getFile(), "bikeplat"));
+        }
 
         BikePoint updatedBikePoint = bikePointRepository.save(existingBikePoint);
         return modelMapper.map(updatedBikePoint, BikePointDto.class);

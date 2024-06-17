@@ -12,6 +12,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.OilProductsResponse;
 import com.swdgr6.bikeplatform.repository.BikeTypeRepository;
 import com.swdgr6.bikeplatform.repository.BrandRepository;
 import com.swdgr6.bikeplatform.repository.OilProductRepository;
+import com.swdgr6.bikeplatform.service.CloudinaryService;
 import com.swdgr6.bikeplatform.service.OilProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class OilProductServiceImpl implements OilProductService {
 
     @Autowired
     private BrandRepository brandRepository;
+    @Autowired
+    private CloudinaryService cloudinaryService;
     @Override
     public OilProductDto saveOilProduct(OilProductDto oilProductDto) {
         OilProduct oilProduct = modelMapper.map(oilProductDto, OilProduct.class);
@@ -46,6 +49,11 @@ public class OilProductServiceImpl implements OilProductService {
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "Brand not found with ID: " + oilProductDto.getBrandId()));
 
         oilProduct.setBrand(brand);
+        if(oilProductDto.getFile()!=null){
+            oilProduct.setImageUrl(cloudinaryService.uploadFile(oilProductDto.getFile(), "bikeplat"));
+        }else{
+            oilProduct.setImageUrl("default");
+        }
         return modelMapper.map(oilProductRepository.save(oilProduct), OilProductDto.class);
     }
 
@@ -100,6 +108,9 @@ public class OilProductServiceImpl implements OilProductService {
             Brand brand = brandRepository.findById(oilProductDto.getBrandId())
                     .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "Brand not found with ID: " + oilProductDto.getBrandId()));
             existingOilProduct.setBrand(brand);
+        }
+        if(oilProductDto.getFile()!=null){
+            existingOilProduct.setImageUrl(cloudinaryService.uploadFile(oilProductDto.getFile(), "bikeplat"));
         }
         OilProduct updatedOilProduct = oilProductRepository.save(existingOilProduct);
         return modelMapper.map(updatedOilProduct, OilProductDto.class);
