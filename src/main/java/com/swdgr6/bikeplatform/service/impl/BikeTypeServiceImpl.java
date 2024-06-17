@@ -9,6 +9,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.BikeTypesResponse;
 import com.swdgr6.bikeplatform.repository.BikeTypeRepository;
 import com.swdgr6.bikeplatform.repository.OilProductRepository;
 import com.swdgr6.bikeplatform.service.BikeTypeService;
+import com.swdgr6.bikeplatform.service.CloudinaryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,9 +34,17 @@ public class BikeTypeServiceImpl implements BikeTypeService {
 
     @Autowired
     private OilProductRepository oilProductRepository;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
     @Override
     public BikeTypeDto saveBikeType(BikeTypeDto bikeTypeDto) {
         BikeType bikeType = modelMapper.map(bikeTypeDto, BikeType.class);
+        if(bikeTypeDto.getFile()!=null){
+            bikeType.setImageUrl(cloudinaryService.uploadFile(bikeTypeDto.getFile(), "bikeplat"));
+        }else{
+            bikeType.setImageUrl("default");
+        }
         bikeType.setDelete(false);
         return modelMapper.map(bikeTypeRepository.save(bikeType), BikeTypeDto.class);
     }
@@ -87,6 +96,9 @@ public class BikeTypeServiceImpl implements BikeTypeService {
         existingBikeType.setTransmission(bikeTypeDto.getTransmission() !=null ? bikeTypeDto.getTransmission() : existingBikeType.getTransmission());
         existingBikeType.setOil_capacity(bikeTypeDto.getOilCapacity() !=null ? bikeTypeDto.getOilCapacity() : existingBikeType.getOil_capacity());
         existingBikeType.setCylinder_capacity(bikeTypeDto.getCylinderCapacity() !=null ? bikeTypeDto.getCylinderCapacity() : existingBikeType.getCylinder_capacity());
+        if(bikeTypeDto.getFile()!=null){
+            existingBikeType.setImageUrl(cloudinaryService.uploadFile(bikeTypeDto.getFile(), "bikeplat"));
+        }
         BikeType updatedBikeType = bikeTypeRepository.save(existingBikeType);
         return modelMapper.map(updatedBikeType, BikeTypeDto.class);
     }

@@ -9,6 +9,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.OilProductsResponse;
 import com.swdgr6.bikeplatform.service.OilProductService;
 import com.swdgr6.bikeplatform.utils.AppConstants;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ProductController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody OilProductDto oilProductDto) {
+    public ResponseEntity<?> createProduct(@Valid  @ModelAttribute OilProductDto oilProductDto) {
         OilProductDto bt = oilProductService.saveOilProduct(oilProductDto);
         return new ResponseEntity<>(bt, HttpStatus.CREATED);
     }
@@ -52,7 +53,7 @@ public class ProductController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id, @RequestBody OilProductUpdatedRequest bt) {
+    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id, @ModelAttribute OilProductUpdatedRequest bt) {
         OilProductDto bt1 = oilProductService.updateOilProduct(id, bt);
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }
@@ -68,7 +69,7 @@ public class ProductController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{id}/bike-types")
-    public ResponseEntity<?> addBikeTypeForProduct(@PathVariable("id") Long oilid, @RequestBody AnyIdsRequest bikeTypeIds){
+    public ResponseEntity<?> addBikeTypeForProduct(@PathVariable("id") Long oilid, @Valid @RequestBody AnyIdsRequest bikeTypeIds){
         String msg = oilProductService.addBikeTypesToOilProduct(oilid, bikeTypeIds.getAnyTypeIds());
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

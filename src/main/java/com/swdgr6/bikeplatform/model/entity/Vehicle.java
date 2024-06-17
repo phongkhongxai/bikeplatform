@@ -25,6 +25,9 @@ public class Vehicle {
     @Column(nullable = false)
     private String color;
 
+    @Column
+    private String imageUrl;
+
     @Column(nullable = false)
     private boolean isDelete = false;
 

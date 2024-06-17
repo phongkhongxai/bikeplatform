@@ -4,6 +4,7 @@ import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
 import com.swdgr6.bikeplatform.model.payload.dto.ResponseDTO;
 import com.swdgr6.bikeplatform.model.payload.responeModel.ResponseHandler;
 import com.swdgr6.bikeplatform.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<ResponseDTO> createOrder(@Valid  @RequestBody OrderDto orderDto) {
         try {
             return ResponseHandler.DataResponse(orderService.createOrder(orderDto), "Created successfully");
         } catch (Exception ex) {
@@ -36,7 +37,7 @@ public class OrderController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseDTO> updateOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<ResponseDTO> updateOrder(@Valid @RequestBody OrderDto orderDto) {
         try {
             return ResponseHandler.DataResponse(orderService.updateOrder(orderDto), "Updated successfully");
         } catch (Exception ex) {

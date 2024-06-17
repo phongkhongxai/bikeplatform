@@ -27,6 +27,9 @@ public class BikePoint {
     @Column(nullable = false)
     private String phone;
 
+    @Column
+    private String imageUrl;
+
     @Column(nullable = false)
     private boolean isDelete = false;
 

@@ -12,6 +12,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.ResponseHandler;
 import com.swdgr6.bikeplatform.service.UserService;
 import com.swdgr6.bikeplatform.utils.AppConstants;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class UserController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/owners")
-    public ResponseEntity<?> createOwnerUser(@RequestBody SignupDto signupDto) {
+    public ResponseEntity<?> createOwnerUser(@Valid @RequestBody SignupDto signupDto) {
         UserDto bt = userService.saveOwnerUser(signupDto);
         return new ResponseEntity<>(bt, HttpStatus.CREATED);
     }
@@ -102,7 +103,7 @@ public class UserController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdatedRequest bt) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id,@Valid @ModelAttribute UserUpdatedRequest bt) {
         UserDto bt1 = userService.updateUser(id, bt);
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }
@@ -118,7 +119,7 @@ public class UserController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     @PutMapping("/{id}/change-password")
-    public ResponseEntity<?> addBikeTypeForProduct(@PathVariable("id") Long id, @RequestParam String oldPassword, @RequestParam String newPassword){
+    public ResponseEntity<?> changePassword(@PathVariable("id") Long id, @RequestParam String oldPassword, @RequestParam String newPassword){
         UserDto bt1 = userService.changePassword(id, oldPassword, newPassword);
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }
