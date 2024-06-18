@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class VehicleDto {
     private Long id;
+    @NotEmpty(message = "Plate should not be empty!")
     @Pattern(regexp = "^[0-9]{2}[A-Z][0-9]{5,6}$", message = "Plate format should be xxXxxxxxx (e.g: 79N305349)")
     private String plate;
     @NotEmpty(message = "Color should not be empty!")
@@ -23,6 +24,6 @@ public class VehicleDto {
     private MultipartFile file;
     @NotNull(message = "User ID should not be null!")
     private Long userId;
-    @NotNull(message = "User ID should not be null!")
+    @NotNull(message = "BikeType ID should not be null!")
     private Long bikeTypeId;
 }
