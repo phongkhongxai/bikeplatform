@@ -27,6 +27,9 @@ public class BikeType {
     @Column(nullable = false)
     private String transmission;
 
+    @Column
+    private String imageUrl;
+
     @Column(nullable = false)
     private String cylinder_capacity;
 

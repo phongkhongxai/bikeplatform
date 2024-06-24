@@ -33,6 +33,9 @@ public class OilProduct {
     @Column(nullable = false)
     private String oilType;
 
+    @Column
+    private String imageUrl;
+
     @Column(nullable = false)
     private boolean isDelete = false;
 

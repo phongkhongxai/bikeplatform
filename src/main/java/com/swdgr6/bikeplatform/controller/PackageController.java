@@ -9,6 +9,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.OilProductsResponse;
 import com.swdgr6.bikeplatform.service.OilProductPackageService;
 import com.swdgr6.bikeplatform.utils.AppConstants;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/package")
+@RequestMapping("/api/v1/packages")
 public class PackageController {
     private OilProductPackageService oilProductPackageService;
 
@@ -26,7 +27,7 @@ public class PackageController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<?> createPackage(@RequestBody OilProductPackageDto oilProductPackageDto) {
+    public ResponseEntity<?> createPackage(@Valid  @RequestBody OilProductPackageDto oilProductPackageDto) {
         OilProductPackageDto bt = oilProductPackageService.saveOilProductPackage(oilProductPackageDto);
         return new ResponseEntity<>(bt, HttpStatus.CREATED);
     }
@@ -58,7 +59,7 @@ public class PackageController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePackage(@PathVariable("id") Long id, @RequestBody ProductPackageUpdatedRequest bt) {
+    public ResponseEntity<?> updatePackage(@PathVariable("id") Long id, @Valid @RequestBody ProductPackageUpdatedRequest bt) {
         OilProductPackageDto bt1 = oilProductPackageService.updatePackage(id, bt);
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }
@@ -68,7 +69,7 @@ public class PackageController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePackage(@PathVariable("id") Long id) {
         String msg = oilProductPackageService.deletePackage(id);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
 }

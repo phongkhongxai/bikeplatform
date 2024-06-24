@@ -12,6 +12,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.VehicleResponse;
 import com.swdgr6.bikeplatform.repository.BikeTypeRepository;
 import com.swdgr6.bikeplatform.repository.UserRepository;
 import com.swdgr6.bikeplatform.repository.VehicleRepository;
+import com.swdgr6.bikeplatform.service.CloudinaryService;
 import com.swdgr6.bikeplatform.service.VehicleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
     @Override
     public VehicleDto saveVehicle(VehicleDto vehicleDto) {
         Optional<BikeType> bikeTypeOptional = bikeTypeRepository.findById(vehicleDto.getBikeTypeId());
@@ -51,7 +55,14 @@ public class VehicleServiceImpl implements VehicleService {
         if (userOptional.isEmpty()) {
             throw new BikeApiException(HttpStatus.NOT_FOUND, "User not found with ID: " + vehicleDto.getUserId());
         }
+
         Vehicle vehicle = modelMapper.map(vehicleDto, Vehicle.class);
+        if(vehicleDto.getFile()!=null){
+            vehicle.setImageUrl(cloudinaryService.uploadFile(vehicleDto.getFile(), "bikeplat"));
+        }
+        else{
+            vehicle.setImageUrl("default");
+        }
         vehicle.setDelete(false);
         return modelMapper.map(vehicleRepository.save(vehicle), VehicleDto.class);
     }
@@ -147,7 +158,9 @@ public class VehicleServiceImpl implements VehicleService {
             }
             existingVehicle.setBikeType(bikeTypeOptional.get());
         }
-
+        if(vehicleDto.getFile()!=null){
+            existingVehicle.setImageUrl(cloudinaryService.uploadFile(vehicleDto.getFile(), "bikeplat"));
+        }
 
         return modelMapper.map(vehicleRepository.save(existingVehicle), VehicleDto.class);
     }

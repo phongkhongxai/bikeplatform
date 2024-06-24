@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class OrderDto {
     private Long id;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateOrder;
+    private int changeTimes;
+    private String status;
     private Long userId;
     private Long vehicleId;
     private Long oilProductPackageId;

@@ -1,22 +1,34 @@
 package com.swdgr6.bikeplatform.service.impl;
 
-import com.swdgr6.bikeplatform.model.entity.OilProductPackage;
-import com.swdgr6.bikeplatform.model.entity.Order;
-import com.swdgr6.bikeplatform.model.entity.User;
-import com.swdgr6.bikeplatform.model.entity.Vehicle;
+import com.swdgr6.bikeplatform.model.entity.*;
+import com.swdgr6.bikeplatform.model.exception.BikeApiException;
+import com.swdgr6.bikeplatform.model.payload.dto.OilProductDto;
 import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
+import com.swdgr6.bikeplatform.model.payload.responeModel.OilProductsResponse;
+import com.swdgr6.bikeplatform.model.payload.responeModel.OrdersResponse;
 import com.swdgr6.bikeplatform.repository.OilProductPackageRepository;
 import com.swdgr6.bikeplatform.repository.OrderRepository;
 import com.swdgr6.bikeplatform.repository.UserRepository;
 import com.swdgr6.bikeplatform.repository.VehicleRepository;
 import com.swdgr6.bikeplatform.service.OrderService;
 import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.time.ZoneOffset.UTC;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -31,14 +43,38 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OilProductPackageRepository oilProductPackageRepository;
 
-    public List<OrderDto> getAllOrders() {
-        List<Order> list = orderRepository.findAll();
-        return mapOrderToDTO(list);
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public OrdersResponse getAllOrders(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<Order> orders = orderRepository.findAllNotDeleted(pageable);
+
+        // get content for page object
+        List<Order> listOfOrders = orders.getContent();
+
+        List<OrderDto> content = listOfOrders.stream().map(op -> modelMapper.map(op, OrderDto.class)).collect(Collectors.toList());
+
+        OrdersResponse templatesResponse = new OrdersResponse();
+        templatesResponse.setContent(content);
+        templatesResponse.setPageNo(orders.getNumber());
+        templatesResponse.setPageSize(orders.getSize());
+        templatesResponse.setTotalElements(orders.getTotalElements());
+        templatesResponse.setTotalPages(orders.getTotalPages());
+        templatesResponse.setLast(orders.isLast());
+
+        return templatesResponse;
     }
 
     public OrderDto createOrder(OrderDto orderDto) {
-        Order order = new Order();
-        order.setDateOrder(LocalDateTime.now());
+        Order order = modelMapper.map(orderDto, Order.class);
+        ZonedDateTime zonedDateTime = ZonedDateTime.now( ZoneId.of("UTC+07:00"));
+        order.setDateOrder(zonedDateTime.toLocalDateTime());
 
         // Fetch associated entities
         User user = userRepository.findExistUserById(orderDto.getUserId());
@@ -54,39 +90,79 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("OilProductPackage not found with id: " + orderDto.getOilProductPackageId());
         }
 
+        if (!user.getVehicles().contains(vehicle)){
+            throw new BikeApiException(HttpStatus.BAD_REQUEST, "Vehicle not valid.(user not have this bike)");
+        }
+        if(!oilProductPackage.getOilProduct().getBikeTypes().contains(vehicle.getBikeType())){
+            throw new BikeApiException(HttpStatus.BAD_REQUEST, "Vehicle not valid.(product not suit with bike type)");
+        }
         order.setUser(user);
         order.setVehicle(vehicle);
         order.setOilProductPackage(oilProductPackage);
-
-        orderRepository.save(order);
-        return maptoDTO(order);
+        order.setStatus("Available");
+        order.setChangeTimes(oilProductPackage.getChangeTimes());
+        order.setDelete(false);
+        return modelMapper.map(orderRepository.save(order), OrderDto.class);
     }
 
-    public OrderDto updateOrder(OrderDto orderDto) {
-        Order order = orderRepository.findExistOrderById(orderDto.getId());
+    @Override
+    public OrderDto getOrderById(Long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
 
-        // Fetch associated entities
-        User user = userRepository.findExistUserById(orderDto.getUserId());
-        if(user == null) {
-            throw new EntityNotFoundException("User not found with id: " + orderDto.getUserId());
+        if (orderOptional.isEmpty()) {
+            throw new BikeApiException(HttpStatus.NOT_FOUND, "Order not found with ID: " + id);
         }
-        Vehicle vehicle = vehicleRepository.findExistByVehicle(orderDto.getVehicleId());
-        if(vehicle == null) {
-            throw new EntityNotFoundException("Vehicle not found with id: " + orderDto.getVehicleId());
+        return modelMapper.map(orderOptional.get(), OrderDto.class);
+    }
+
+    public OrderDto updateVehicleForOrder(Long id, Long vehicleId) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+
+        if (orderOptional.isEmpty()) {
+            throw new BikeApiException(HttpStatus.NOT_FOUND, "Order not found with ID: " + id);
         }
 
-        OilProductPackage oilProductPackage = oilProductPackageRepository.findExistByOilProduct(orderDto.getOilProductPackageId());
-        if(oilProductPackage == null) {
-            throw new EntityNotFoundException("OilProductPackage not found with id: " + orderDto.getOilProductPackageId());
+        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "Vehicle not found with ID: " + vehicleId));
+
+        Order existingOrder = orderOptional.get();
+        if (!existingOrder.getUser().getVehicles().contains(vehicle)){
+            throw new BikeApiException(HttpStatus.BAD_REQUEST, "Vehicle not valid.");
         }
+        if(!existingOrder.getOilProductPackage().getOilProduct().getBikeTypes().contains(vehicle.getBikeType())){
+            throw new BikeApiException(HttpStatus.BAD_REQUEST, "Vehicle not valid.(product not suit with bike type)");
+        }
+        existingOrder.setVehicle(vehicle);
+        return modelMapper.map(orderRepository.save(existingOrder),OrderDto.class);
+    }
 
-        order.setDateOrder(LocalDateTime.now());
-        order.setUser(user);
-        order.setVehicle(vehicle);
-        order.setOilProductPackage(oilProductPackage);
+    @Override
+    public OrderDto updateStatusOfOrder(Long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
 
-        orderRepository.save(order);
-        return maptoDTO(order);
+        if (orderOptional.isEmpty()) {
+            throw new BikeApiException(HttpStatus.NOT_FOUND, "Order not found with ID: " + id);
+        }
+        Order existingOrder = orderOptional.get();
+        if(existingOrder.getStatus().equalsIgnoreCase("Completed")){
+            throw new BikeApiException(HttpStatus.NOT_FOUND, "Order already be completed.");
+        }
+        existingOrder.setStatus("Completed");
+        return modelMapper.map(orderRepository.save(existingOrder),OrderDto.class);
+    }
+
+    @Override
+    public OrderDto updateChangeTimeOfOrder(Long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isEmpty()) {
+            throw new BikeApiException(HttpStatus.NOT_FOUND, "Order not found with ID: " + id);
+        }
+        Order existingOrder = orderOptional.get();
+        if(existingOrder.getChangeTimes()==0){
+            return modelMapper.map(existingOrder, OrderDto.class);
+        }
+        existingOrder.setChangeTimes(existingOrder.getChangeTimes()-1);
+        return modelMapper.map(orderRepository.save(existingOrder),OrderDto.class);
     }
 
     public String deleteOrder(Long id) {

@@ -1,19 +1,9 @@
 package com.swdgr6.bikeplatform.config;
 
-import com.swdgr6.bikeplatform.util.VNPayUtil;
-import jakarta.servlet.http.HttpServletRequest;
+import com.swdgr6.bikeplatform.utils.VNPayUtil;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 @Configuration

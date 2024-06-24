@@ -1,5 +1,7 @@
 package com.swdgr6.bikeplatform.model.payload.requestModel;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,16 +9,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BikePointUpdatedRequest {
-    private String name;
+public class UserUpdatedRequest {
+    private String username;
+    private String email;
+    private String fullName;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dob;
     private String address;
-    @Pattern(regexp="(^$|[0-9]{8,11})", message = "Phone number must be 8 or 11 digits!")
+    private String gender;
+    @Pattern(regexp="(^$|[0-9]{10,11})", message = "Phone number must be 10 or 11 digits!")
     private String phone;
-    private String imageUrl;
     private MultipartFile file;
+    private String avatarUrl;
 
 }
