@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users u WHERE u.is_delete = false and u.user_id = :userId", nativeQuery = true)
     User findExistUserById(Long userId);
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.isDelete = false")
+    Long countActiveUsers();
 }

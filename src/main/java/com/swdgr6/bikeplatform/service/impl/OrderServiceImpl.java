@@ -41,14 +41,18 @@ public class OrderServiceImpl implements OrderService {
         order.setDateOrder(LocalDateTime.now());
 
         // Fetch associated entities
-        User user = userRepository.findById(orderDto.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + orderDto.getUserId()));
-
-        Vehicle vehicle = vehicleRepository.findById(orderDto.getVehicleId())
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with id: " + orderDto.getVehicleId()));
-
-        OilProductPackage oilProductPackage = oilProductPackageRepository.findById(orderDto.getOilProductPackageId())
-                .orElseThrow(() -> new EntityNotFoundException("OilProductPackage not found with id: " + orderDto.getOilProductPackageId()));
+        User user = userRepository.findExistUserById(orderDto.getUserId());
+        if(user == null) {
+            throw new EntityNotFoundException("User not found with id: " + orderDto.getUserId());
+        }
+        Vehicle vehicle = vehicleRepository.findExistByVehicle(orderDto.getVehicleId());
+        if(vehicle == null) {
+            throw new EntityNotFoundException("Vehicle not found with id: " + orderDto.getVehicleId());
+        }
+        OilProductPackage oilProductPackage = oilProductPackageRepository.findExistByOilProduct(orderDto.getOilProductPackageId());
+        if (oilProductPackage == null) {
+            throw new EntityNotFoundException("OilProductPackage not found with id: " + orderDto.getOilProductPackageId());
+        }
 
         order.setUser(user);
         order.setVehicle(vehicle);
@@ -66,11 +70,15 @@ public class OrderServiceImpl implements OrderService {
         if(user == null) {
             throw new EntityNotFoundException("User not found with id: " + orderDto.getUserId());
         }
-        Vehicle vehicle = vehicleRepository.findById(orderDto.getVehicleId())
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with id: " + orderDto.getVehicleId()));
+        Vehicle vehicle = vehicleRepository.findExistByVehicle(orderDto.getVehicleId());
+        if(vehicle == null) {
+            throw new EntityNotFoundException("Vehicle not found with id: " + orderDto.getVehicleId());
+        }
 
-        OilProductPackage oilProductPackage = oilProductPackageRepository.findById(orderDto.getOilProductPackageId())
-                .orElseThrow(() -> new EntityNotFoundException("OilProductPackage not found with id: " + orderDto.getOilProductPackageId()));
+        OilProductPackage oilProductPackage = oilProductPackageRepository.findExistByOilProduct(orderDto.getOilProductPackageId());
+        if(oilProductPackage == null) {
+            throw new EntityNotFoundException("OilProductPackage not found with id: " + orderDto.getOilProductPackageId());
+        }
 
         order.setDateOrder(LocalDateTime.now());
         order.setUser(user);

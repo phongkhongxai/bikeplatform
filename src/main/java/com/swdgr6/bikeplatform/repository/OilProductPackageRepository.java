@@ -13,4 +13,7 @@ public interface OilProductPackageRepository extends JpaRepository<OilProductPac
     Page<OilProductPackage> findAllNotDeleted(Pageable pageable);
 
     Page<OilProductPackage> findByOilProductAndIsDeleteFalse(OilProduct oilProduct, Pageable pageable);
+
+    @Query("SELECT b FROM OilProductPackage b WHERE b.id = :oilpackId AND b.isDelete = false")
+    OilProductPackage findExistByOilProduct(Long oilpackId);
 }
