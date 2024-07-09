@@ -44,6 +44,9 @@ public class SecurityConfig {
     private LogoutHandler logoutHandler;
 
     @Autowired
+    private OAuth2AuthenticationSuccessHandler handler;
+
+    @Autowired
     public SecurityConfig(UserDetailsService userDetailsService,
                           JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                           JwtAuthenticationFilter jwtAuthenticationFilter, LogoutHandler logoutHandler) {
@@ -86,6 +89,13 @@ public class SecurityConfig {
                 .addLogoutHandler(logoutHandler)
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
         );
+
+        // oauth configuration
+        http.oauth2Login(oauth2 -> {
+            oauth2.loginPage("/api/v1/auth/login-google");
+            oauth2.successHandler(handler);
+        });
+
 
         http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
