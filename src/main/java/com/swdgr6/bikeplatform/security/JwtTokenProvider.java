@@ -46,7 +46,7 @@ public class JwtTokenProvider {
                 .setExpiration(expirationDate)
                 .claim("userId", userId)
                 .claim("roleName", role )
-                .signWith(key())
+                .signWith(SignatureAlgorithm.HS384 ,key())
                 .compact();
     }
 

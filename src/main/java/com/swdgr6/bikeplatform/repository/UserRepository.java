@@ -28,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findByRoleAndIsDeleteFalse(Role role, Pageable pageable);
 
+    Optional<User> findByUid(String uid);
+
 }
