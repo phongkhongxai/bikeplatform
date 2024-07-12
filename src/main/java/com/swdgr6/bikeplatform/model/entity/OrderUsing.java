@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public class OrderUsing {
     @Column(name="orderusing_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private double price;
 
     @Column
@@ -32,9 +33,11 @@ public class OrderUsing {
     @Column(nullable = false)
     private String status;
 
+    private boolean isConfirm =false;
+
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateUsing;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateUsing;
 
     @Column
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

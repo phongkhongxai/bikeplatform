@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -160,6 +161,48 @@ public class OrderServiceImpl implements OrderService {
         existingOrder.setChangeTimes(existingOrder.getChangeTimes()-1);
         return modelMapper.map(orderRepository.save(existingOrder),OrderDto.class);
     }
+
+    @Override
+    public OrdersResponse getAllOrdersByUser(Long uid, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Optional<User> userOptional = userRepository.findById(uid);
+        if (userOptional.isEmpty()) {
+            throw new BikeApiException(HttpStatus.NOT_FOUND, "User not found with ID: " + uid);
+        }
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<Order> orders = orderRepository.findOrdersByUserAndIsDeleteFalse(userOptional.get(),pageable);
+
+        // get content for page object
+        List<Order> listOfOrders = orders.getContent();
+
+        List<OrderDto> content = listOfOrders.stream().map(op -> modelMapper.map(op, OrderDto.class)).collect(Collectors.toList());
+
+        OrdersResponse templatesResponse = new OrdersResponse();
+        templatesResponse.setContent(content);
+        templatesResponse.setPageNo(orders.getNumber());
+        templatesResponse.setPageSize(orders.getSize());
+        templatesResponse.setTotalElements(orders.getTotalElements());
+        templatesResponse.setTotalPages(orders.getTotalPages());
+        templatesResponse.setLast(orders.isLast());
+
+        return templatesResponse;
+    }
+
+//    @Override
+//    @Scheduled(cron = "0 6 10 18 6 ?", zone = "Asia/Ho_Chi_Minh")
+//    public void updateWhenDate() {
+//        Optional<Order> orderOptional = orderRepository.findById(1L);
+//        if (orderOptional.isEmpty()) {
+//            throw new BikeApiException(HttpStatus.NOT_FOUND, "Order not found with ID: ");
+//        }
+//        Order existingOrder = orderOptional.get();
+//        existingOrder.setStatus("pjij");
+//        orderRepository.save(existingOrder);
+//    }
 
     public String deleteOrder(Long id) {
         Order order = orderRepository.findExistOrderById(id);

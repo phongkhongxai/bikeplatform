@@ -23,7 +23,6 @@ public class BikePointDto {
     @NotEmpty(message = "Name should not be empty!")
     @Size(max = 255, message = "Name should not exceed 255 characters!")
     private String name;
-
     @NotEmpty(message = "Address should not be empty!")
     @Size(max = 255, message = "Address should not exceed 255 characters!")
     private String address;
