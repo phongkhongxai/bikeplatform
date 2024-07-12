@@ -23,9 +23,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users u WHERE u.is_delete = false and u.user_id = :userId", nativeQuery = true)
     User findExistUserById(Long userId);
-
     @Query("SELECT us FROM User us WHERE us.isDelete = false")
     Page<User> findAllNotDeleted(Pageable pageable);
 
     Page<User> findByRoleAndIsDeleteFalse(Role role, Pageable pageable);
+
+    Optional<User> findByUid(String uid);
+
 }

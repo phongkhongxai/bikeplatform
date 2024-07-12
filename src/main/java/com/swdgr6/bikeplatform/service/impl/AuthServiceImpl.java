@@ -1,5 +1,8 @@
 package com.swdgr6.bikeplatform.service.impl;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.swdgr6.bikeplatform.model.entity.AccessToken;
 import com.swdgr6.bikeplatform.model.entity.RefreshToken;
 import com.swdgr6.bikeplatform.model.entity.Role;
@@ -30,6 +33,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -194,5 +199,44 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         return null;
+    }
+
+    @Override
+    public String authenticateWithGoogle(String idToken) throws IOException, FirebaseAuthException {
+        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+        String uid = decodedToken.getUid();
+        String email = decodedToken.getEmail();
+
+        if(email == null){
+            throw new IOException("Email is required");
+        }
+
+        // add check if user already exists
+        User user = userRepository.findByUid(uid).orElse(null);
+
+        if(user == null){
+            user = new User();
+            user.setEmail(decodedToken.getEmail());
+            user.setUid(uid);
+            user.setAddress("Ho Chi Minh City");
+            user.setAvatarUrl("https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png");
+            user.setFullName("default");
+            user.setDob(LocalDate.now());
+            user.setUsername("username");
+            user.setGender("default");
+            user.setPhone("0123456789");
+            user.setPassword(passwordEncoder.encode("default"));
+            Role userRole = roleRepository.findByRoleName("ROLE_CUSTOMER")
+                    .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "User Role not found."));
+            user.setRole(userRole);
+            user.setDelete(false);
+            userRepository.save(user);
+        }
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null);
+        String token = jwtTokenProvider.generateAccessToken(authentication, user);
+
+
+        return token;
     }
 }

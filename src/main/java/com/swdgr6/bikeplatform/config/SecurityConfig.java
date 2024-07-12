@@ -38,10 +38,17 @@ import java.util.Arrays;
         scheme = "bearer"
 )
 public class SecurityConfig {
+    @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
     private LogoutHandler logoutHandler;
+
+    @Autowired
+    private OAuth2AuthenticationSuccessHandler handler;
 
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService,
@@ -106,7 +113,7 @@ public class SecurityConfig {
 
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

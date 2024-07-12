@@ -1,3 +1,4 @@
+
 package com.swdgr6.bikeplatform.service.impl;
 
 import com.swdgr6.bikeplatform.model.entity.*;
@@ -66,7 +67,6 @@ public class OrderUsingServiceImpl implements OrderUsingService {
         orderUsing.setStatus("Pending");
         orderUsing.setConfirm(false);
         orderUsing.setDelete(false);
-
         return modelMapper.map(orderUsingRepository.save(orderUsing), OrderUsingDto.class);
     }
 
@@ -379,3 +379,4 @@ public class OrderUsingServiceImpl implements OrderUsingService {
         return templatesResponse;
     }
 }
+

@@ -1,5 +1,6 @@
 package com.swdgr6.bikeplatform.controller;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.swdgr6.bikeplatform.model.payload.dto.LoginDto;
 import com.swdgr6.bikeplatform.model.payload.dto.SignupDto;
 import com.swdgr6.bikeplatform.model.payload.responeModel.AuthenticationResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/no-auth")
@@ -42,6 +44,21 @@ public class AuthController {
             HttpServletResponse response
     ) throws IOException {
         return ResponseEntity.ok(authService.refreshToken(request, response));
+    }
+
+    @PostMapping("/login-google")
+    public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> tokenRequest) {
+        String idToken = tokenRequest.get("idToken");
+        try {
+            String token = authService.authenticateWithGoogle(idToken);
+            return ResponseEntity.ok(new AuthenticationResponse(token, null, null));
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(401).body("Authentication failed: Invalid Firebase token");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(401).body("Authentication failed");
+        }
     }
 
 }

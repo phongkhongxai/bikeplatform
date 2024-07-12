@@ -25,7 +25,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Page<Order> findOrdersByUserAndIsDeleteFalse(User user, Pageable pageable);
 
-
+    @Query("SELECT o FROM Order o WHERE o.isDelete = false AND o.user.id = :userId")
+    Order findExistOrderByUserId(@Param("userId") Long userId);
 
 }
 

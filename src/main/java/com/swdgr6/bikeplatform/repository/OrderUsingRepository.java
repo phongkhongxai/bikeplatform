@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 
 public interface OrderUsingRepository extends JpaRepository<OrderUsing, Long> {
+
     @Query("SELECT b FROM OrderUsing b WHERE b.isDelete = false")
     Page<OrderUsing> findAllNotDeleted(Pageable pageable);
 
