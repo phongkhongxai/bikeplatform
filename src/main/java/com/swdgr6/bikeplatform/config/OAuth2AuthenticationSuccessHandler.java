@@ -63,6 +63,6 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             logger.info("User saved: " + email);
         }
 
-            new DefaultRedirectStrategy().sendRedirect(request, response, "/swagger-ui.html");
+            new DefaultRedirectStrategy().sendRedirect(request, response, "/");
     }
 }

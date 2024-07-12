@@ -38,9 +38,13 @@ import java.util.Arrays;
         scheme = "bearer"
 )
 public class SecurityConfig {
+    @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
     private LogoutHandler logoutHandler;
 
     @Autowired
@@ -90,11 +94,6 @@ public class SecurityConfig {
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
         );
 
-        // oauth configuration
-        http.oauth2Login(oauth2 -> {
-            oauth2.loginPage("/api/v1/auth/login-google");
-            oauth2.successHandler(handler);
-        });
 
 
         http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -116,7 +115,7 @@ public class SecurityConfig {
 
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
