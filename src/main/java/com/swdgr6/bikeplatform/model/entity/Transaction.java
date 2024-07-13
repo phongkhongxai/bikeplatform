@@ -28,9 +28,15 @@ public class Transaction {
     private OrderUsing orderUsing;
 
     @Column(nullable = false)
-    private Long payAmount;
+    private double payAmount;
+
+    @Column(nullable = false, length = 50)
+    private String status;
 
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
+
+    private boolean isDelete = false;
+
 }
