@@ -24,4 +24,8 @@ public interface UserService {
 
     Long countCustomer();
 
+    void storeJwtToken(String paymentId, String jwt);
+
+    String retrieveJwtToken(String paymentId);
+
 }
