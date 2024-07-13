@@ -17,6 +17,7 @@ public interface BikePointService {
     String addBrandForBikePoint(Long bikePointId, Set<Long> brandIds);
     String removeBrandForBikePoint(Long bikePointId, Long brandId);
 
+    Long countBikePoint();
 
 
 }

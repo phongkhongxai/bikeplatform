@@ -30,4 +30,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUid(String uid);
 
+    //count the user have role_customer
+    @Query("SELECT COUNT(u) FROM User u " +
+            "INNER JOIN Role r ON u.role.id = r.id " +
+            "WHERE r.roleName = 'ROLE_CUSTOMER' AND u.isDelete = false")
+    Long countCustomer();
 }
