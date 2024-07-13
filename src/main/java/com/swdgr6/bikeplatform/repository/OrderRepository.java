@@ -3,6 +3,8 @@ package com.swdgr6.bikeplatform.repository;
 
 import com.swdgr6.bikeplatform.model.entity.OilProduct;
 import com.swdgr6.bikeplatform.model.entity.Order;
+import com.swdgr6.bikeplatform.model.entity.User;
+import com.swdgr6.bikeplatform.model.entity.Vehicle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +23,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.isDelete = false AND o.id = :orderId")
     Order findExistOrderById(@Param("orderId") Long orderId);
 
+    Page<Order> findOrdersByUserAndIsDeleteFalse(User user, Pageable pageable);
+
     @Query("SELECT o FROM Order o WHERE o.isDelete = false AND o.user.id = :userId")
     Order findExistOrderByUserId(@Param("userId") Long userId);
 
@@ -28,5 +32,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT COUNT(o) FROM Order o " +
             "WHERE o.status = 'AVAILABLE' AND o.isDelete = false")
     Long countAvailableOrder();
+
 }
 

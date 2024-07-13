@@ -2,6 +2,7 @@ package com.swdgr6.bikeplatform.controller;
 
 import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
 import com.swdgr6.bikeplatform.model.payload.dto.ResponseDTO;
+import com.swdgr6.bikeplatform.model.payload.responeModel.OrdersResponse;
 import com.swdgr6.bikeplatform.model.payload.responeModel.ResponseHandler;
 import com.swdgr6.bikeplatform.service.OrderService;
 import com.swdgr6.bikeplatform.utils.AppConstants;
@@ -22,6 +23,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+
     @GetMapping
     public ResponseEntity<ResponseDTO> getAllOrders(@RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
                                                     @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
@@ -32,6 +34,14 @@ public class OrderController {
         } catch (Exception ex) {
             return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.GET,"api/v1/auth/orders");
         }
+    }
+
+    @GetMapping("/by-user/{uid}")
+    public OrdersResponse getAllOrdersOfUser(@PathVariable("uid") Long uid, @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+                                             @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+                                             @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+                                             @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+         return orderService.getAllOrdersByUser(uid, pageNo, pageSize, sortBy, sortDir);
     }
 
     @SecurityRequirement(name = "Bear Authentication")
@@ -52,18 +62,6 @@ public class OrderController {
          OrderDto order = orderService.updateVehicleForOrder(id, vehicleId);
          return new ResponseEntity<>(order, HttpStatus.OK);
 
-    }
-
-    @SecurityRequirement(name = "Bear Authentication")
-    @PreAuthorize("hasRole('ROLE_OWNER') or hasRole('ROLE_ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateChangeTimeOfOrder(@PathVariable("id") Long id) {
-        OrderDto order = orderService.updateChangeTimeOfOrder(id);
-        if (order.getChangeTimes()==0){
-            OrderDto orderDto = orderService.updateStatusOfOrder(id);
-            return new ResponseEntity<>(orderDto, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @SecurityRequirement(name = "Bear Authentication")
