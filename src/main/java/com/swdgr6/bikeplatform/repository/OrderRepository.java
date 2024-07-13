@@ -23,5 +23,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o WHERE o.isDelete = false AND o.user.id = :userId")
     Order findExistOrderByUserId(@Param("userId") Long userId);
+
+    //count the order have status available
+    @Query("SELECT COUNT(o) FROM Order o " +
+            "WHERE o.status = 'AVAILABLE' AND o.isDelete = false")
+    Long countAvailableOrder();
 }
 

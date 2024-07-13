@@ -90,4 +90,13 @@ public class OrderController {
             return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.GET,"api/v1/orders/search");
         }
     }
+
+    @GetMapping("/count-order")
+    public ResponseEntity<ResponseDTO> countAvailableOrder() {
+        try {
+            return ResponseHandler.DataResponse(orderService.countAvailableOrder(), "Counted successfully");
+        } catch (Exception ex) {
+            return ResponseHandler.ErrorResponse(HttpStatus.BAD_REQUEST, ex, RequestMethod.GET,"api/v1/orders/count-order");
+        }
+    }
 }

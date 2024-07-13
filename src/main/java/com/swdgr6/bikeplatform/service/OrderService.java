@@ -22,5 +22,6 @@ public interface OrderService {
     String deleteOrder(Long id);
 
     List<OrderDto> searchOrders(String searchTerm);
+    Long countAvailableOrder();
 }
 

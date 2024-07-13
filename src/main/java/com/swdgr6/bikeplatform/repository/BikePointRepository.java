@@ -14,4 +14,7 @@ public interface BikePointRepository extends JpaRepository<BikePoint, Long> {
 
     Page<BikePoint> findByBrandsAndIsDeleteFalse(Brand brand, Pageable pageable);
 
+    //count bike point
+    @Query("SELECT COUNT(b) FROM BikePoint b WHERE b.isDelete = false")
+    Long countBikePoint();
 }

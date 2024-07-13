@@ -222,9 +222,9 @@ public class AuthServiceImpl implements AuthService {
             user.setAvatarUrl("https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png");
             user.setFullName("default");
             user.setDob(LocalDate.now());
-            user.setUsername("username");
+            user.setUsername("default");
             user.setGender("default");
-            user.setPhone("0123456789");
+            user.setPhone("default");
             user.setPassword(passwordEncoder.encode("default"));
             Role userRole = roleRepository.findByRoleName("ROLE_CUSTOMER")
                     .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "User Role not found."));

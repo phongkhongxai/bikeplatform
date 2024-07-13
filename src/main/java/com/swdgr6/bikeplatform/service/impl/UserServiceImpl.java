@@ -268,4 +268,9 @@ public class UserServiceImpl implements UserService {
 
         return templatesResponse;
     }
+
+    @Override
+    public Long countCustomer() {
+        return userRepository.countCustomer();
+    }
 }
