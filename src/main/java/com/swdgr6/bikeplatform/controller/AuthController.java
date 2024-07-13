@@ -1,5 +1,6 @@
 package com.swdgr6.bikeplatform.controller;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.swdgr6.bikeplatform.model.payload.dto.LoginDto;
 import com.swdgr6.bikeplatform.model.payload.dto.SignupDto;
 import com.swdgr6.bikeplatform.model.payload.responeModel.AuthenticationResponse;
@@ -13,9 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/no-auth")
 public class AuthController {
     private AuthService authService;
 
@@ -24,18 +26,13 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/test")
-    public String helloWorld(){
-        return "Hello World";
-    }
-
     @PostMapping(value = {"/login", "/signin"})
     public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody LoginDto loginDto){
         AuthenticationResponse token = authService.login(loginDto);
         return  ResponseEntity.ok(token);
     }
 
-    @PostMapping(value = {"/signup", "/register"})
+    @PostMapping("/register")
     public ResponseEntity<String> signup(@Valid @RequestBody SignupDto signupDto){
         String response = authService.signup(signupDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -49,6 +46,19 @@ public class AuthController {
         return ResponseEntity.ok(authService.refreshToken(request, response));
     }
 
-
+    @PostMapping("/login-google")
+    public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> tokenRequest) {
+        String idToken = tokenRequest.get("idToken");
+        try {
+            String token = authService.authenticateWithGoogle(idToken);
+            return ResponseEntity.ok(new AuthenticationResponse(token, null, null));
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(401).body("Authentication failed: Invalid Firebase token");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(401).body("Authentication failed");
+        }
+    }
 
 }

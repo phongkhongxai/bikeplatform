@@ -1,5 +1,6 @@
 package com.swdgr6.bikeplatform.security;
 
+import com.swdgr6.bikeplatform.model.entity.User;
 import com.swdgr6.bikeplatform.model.exception.BikeApiException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -23,27 +24,30 @@ public class JwtTokenProvider {
     @Value("${app.jwt-refresh-expiration-milliseconds}")
     private long jwtRefreshExpiration;
 
-    public String generateAccessToken(Authentication authentication) {
-        String token = generateToken(authentication, jwtAccessExpiration);
+    public String generateAccessToken(Authentication authentication, User user) {
+        return generateToken(authentication, user, jwtAccessExpiration);
+    }
+
+    public String generateRefreshToken(Authentication authentication, User user) {
+        String token = generateToken(authentication, user, jwtRefreshExpiration);
         return token;
     }
 
-    public String generateRefreshToken(Authentication authentication) {
-        String token = generateToken(authentication, jwtRefreshExpiration);
-        return token;
-    }
-
-    public String generateToken(Authentication authentication, long expiration) {
+    public String generateToken(Authentication authentication, User user, long expiration) {
         String username = authentication.getName();
+        String userId = user.getId().toString();
+        String role = user.getRole().getRoleName();
+
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + expiration);
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expirationDate)
-                .signWith(key())
+                .claim("userId", userId)
+                .claim("roleName", role )
+                .signWith(SignatureAlgorithm.HS384 ,key())
                 .compact();
-        return token;
     }
 
     private Key key() {

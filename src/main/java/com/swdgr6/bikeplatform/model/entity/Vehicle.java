@@ -25,6 +25,12 @@ public class Vehicle {
     @Column(nullable = false)
     private String color;
 
+    @Column
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private boolean isDelete = false;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

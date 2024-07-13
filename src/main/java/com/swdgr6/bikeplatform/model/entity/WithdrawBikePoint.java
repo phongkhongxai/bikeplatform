@@ -32,4 +32,7 @@ public class WithdrawBikePoint {
 
     @Column(nullable = false, length = 50)
     private String status;
+
+    private boolean isDelete = false;
+
 }

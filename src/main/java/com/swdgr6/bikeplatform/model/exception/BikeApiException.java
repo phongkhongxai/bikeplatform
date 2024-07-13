@@ -5,10 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
+@ResponseStatus
 public class BikeApiException extends RuntimeException{
     private HttpStatus status;
-
     private String message;
 
     public BikeApiException(HttpStatus status, String message) {

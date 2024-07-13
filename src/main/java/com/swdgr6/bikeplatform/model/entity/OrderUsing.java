@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -20,21 +21,27 @@ public class OrderUsing {
     @Column(name="orderusing_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private double price;
 
-    @Column(nullable = false)
+    @Column
     private int rating;
 
-    @Column(nullable = false)
+    @Column
     private String feedback;
 
     @Column(nullable = false)
-    private boolean status;
+    private String status;
+
+    private boolean isConfirm =false;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateUsing;
+
+    @Column
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateUsing;
+    private LocalDateTime dateUpdateUsing;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
@@ -47,5 +54,5 @@ public class OrderUsing {
     @OneToMany(mappedBy = "orderUsing", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
 
-
+    private boolean isDelete = false;
 }

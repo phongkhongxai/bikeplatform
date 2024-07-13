@@ -21,6 +21,14 @@ public class Wallet {
     @Column(nullable = false)
     private double balance;
 
+    @Column(nullable = false)
+    private String accountNumber;
+
+    @Column(nullable = false)
+    private String bankName;
+
+    private boolean isDelete = false;
+
     @OneToOne
     @JoinColumn(name = "bike_point_id", nullable = false)
     private BikePoint bikePoint;

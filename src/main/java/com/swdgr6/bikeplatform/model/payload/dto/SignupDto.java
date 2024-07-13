@@ -1,5 +1,6 @@
 package com.swdgr6.bikeplatform.model.payload.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +30,7 @@ public class SignupDto {
     private String fullName;
 
     @NotNull(message = "Date of birth should not be empty!")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
 
     @NotEmpty(message = "Address should not be empty!")
