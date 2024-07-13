@@ -27,7 +27,7 @@ public class Wallet {
     @Column(nullable = false)
     private String bankName;
 
-    private boolean isDeleted = false;
+    private boolean isDelete = false;
 
     @OneToOne
     @JoinColumn(name = "bike_point_id", nullable = false)

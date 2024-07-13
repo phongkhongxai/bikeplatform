@@ -5,12 +5,14 @@ import com.swdgr6.bikeplatform.model.entity.*;
 import com.swdgr6.bikeplatform.model.exception.BikeApiException;
 import com.swdgr6.bikeplatform.model.payload.dto.OrderDto;
 import com.swdgr6.bikeplatform.model.payload.dto.OrderUsingDto;
+import com.swdgr6.bikeplatform.model.payload.dto.TransactionDto;
 import com.swdgr6.bikeplatform.model.payload.requestModel.OrderUsingUpdatedRequest;
 import com.swdgr6.bikeplatform.model.payload.responeModel.OrderUsingsResponse;
 import com.swdgr6.bikeplatform.model.payload.responeModel.OrdersResponse;
 import com.swdgr6.bikeplatform.repository.*;
 import com.swdgr6.bikeplatform.service.OrderService;
 import com.swdgr6.bikeplatform.service.OrderUsingService;
+import com.swdgr6.bikeplatform.service.TransactionService;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,8 @@ public class OrderUsingServiceImpl implements OrderUsingService {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private TransactionService transactionService;
     @Autowired
     private ModelMapper modelMapper;
     @Override
@@ -129,7 +133,11 @@ public class OrderUsingServiceImpl implements OrderUsingService {
         }
         OrderUsing orderUsing = orderUsingOptional.get();
         orderUsing.setConfirm(true);
-
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setPayAmount(orderUsing.getPrice());
+        transactionDto.setOrderUsingId(orderUsing.getId());
+        transactionDto.setWalletId(orderUsing.getBikePoint().getWallet().getId());
+        transactionService.createTransaction(transactionDto);
         return modelMapper.map(orderUsingRepository.save(orderUsing), OrderUsingDto.class);
 
     }
@@ -349,6 +357,7 @@ public class OrderUsingServiceImpl implements OrderUsingService {
 
         return templatesResponse;
     }
+
 
     @Override
     public OrderUsingsResponse getOrderUsingsByUser(Long uid, int pageNo, int pageSize, String sortBy, String sortDir) {

@@ -23,6 +23,7 @@ public interface OrderUsingRepository extends JpaRepository<OrderUsing, Long> {
 
     Page<OrderUsing> findOrderUsingsByStatusAndIsDeleteFalse(String status, Pageable pageable);
     Page<OrderUsing> findOrderUsingsByBikePointAndIsDeleteFalseAndStatus(BikePoint bikePoint, String status, Pageable pageable);
+    Page<OrderUsing> findOrderUsingsByBikePointAndIsDeleteFalseAndIsConfirmFalseAndStatus(BikePoint bikePoint, String status, Pageable pageable);
 
     Page<OrderUsing> findOrderUsingsByOrder_UserAndIsDeleteFalse(User user, Pageable pageable);
     Page<OrderUsing> findOrderUsingsByOrder_UserAndIsDeleteFalseAndStatus(User user, String status, Pageable pageable);
