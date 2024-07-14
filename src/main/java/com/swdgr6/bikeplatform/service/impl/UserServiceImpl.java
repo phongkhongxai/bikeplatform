@@ -25,7 +25,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +42,8 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CloudinaryService cloudinaryService;
+
+    private Map<String, String> paymentIdToJwtMap = new ConcurrentHashMap<>();
 
 
     @Override
@@ -267,5 +271,20 @@ public class UserServiceImpl implements UserService {
         templatesResponse.setLast(users.isLast());
 
         return templatesResponse;
+    }
+
+    @Override
+    public Long countCustomer() {
+        return userRepository.countCustomer();
+    }
+
+    @Override
+    public void storeJwtToken(String paymentId, String jwt) {
+        paymentIdToJwtMap.put(paymentId, jwt);
+    }
+
+    @Override
+    public String retrieveJwtToken(String paymentId) {
+        return paymentIdToJwtMap.get(paymentId);
     }
 }

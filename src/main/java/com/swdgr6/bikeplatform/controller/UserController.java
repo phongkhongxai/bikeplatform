@@ -124,4 +124,11 @@ public class UserController {
         return new ResponseEntity<>(bt1, HttpStatus.OK);
     }
 
+
+    @GetMapping("/count-customer")
+    public ResponseEntity<?> countCustomer() {
+        Long count = userService.countCustomer();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
 }

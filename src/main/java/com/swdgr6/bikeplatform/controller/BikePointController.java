@@ -98,4 +98,8 @@ public class BikePointController {
         return new ResponseEntity<>(msg, HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/count-bike-point")
+    public Long countBikePoint(){
+        return bikePointService.countBikePoint();
+    }
 }

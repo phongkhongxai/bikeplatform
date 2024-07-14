@@ -22,6 +22,10 @@ public interface UserService {
     UsersResponse getAllAdminUser(int pageNo, int pageSize, String sortBy, String sortDir);
     UsersResponse getAllCustomerUser(int pageNo, int pageSize, String sortBy, String sortDir);
 
+    Long countCustomer();
 
+    void storeJwtToken(String paymentId, String jwt);
+
+    String retrieveJwtToken(String paymentId);
 
 }

@@ -232,6 +232,11 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Long countAvailableOrder() {
+        return orderRepository.countAvailableOrder();
+    }
+
     private OrderDto maptoDTO(Order order){
         OrderDto orderDTO = new OrderDto();
         orderDTO.setId(order.getId());

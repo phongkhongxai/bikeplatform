@@ -222,4 +222,9 @@ public class BikePointServiceImpl implements BikePointService {
             return "Brand was not associated with the BikePoint";
         }
     }
+
+    @Override
+    public Long countBikePoint() {
+        return bikePointRepository.countBikePoint();
+    }
 }
