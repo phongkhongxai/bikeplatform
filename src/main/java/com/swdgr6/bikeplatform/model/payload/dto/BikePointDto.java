@@ -34,4 +34,5 @@ public class BikePointDto {
     private Long walletId;
     @NotNull(message = "User should not be null!")
     private Long userId;
+    private Set<BrandDto> brands;
 }
