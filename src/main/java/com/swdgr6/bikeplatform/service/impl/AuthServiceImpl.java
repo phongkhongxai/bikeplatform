@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -202,7 +201,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String authenticateWithGoogle(String idToken) throws IOException, FirebaseAuthException {
+    public AuthenticationResponse authenticateWithGoogle(String idToken) throws IOException, FirebaseAuthException {
         FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
         String uid = decodedToken.getUid();
         String email = decodedToken.getEmail();
@@ -234,9 +233,19 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null);
-        String token = jwtTokenProvider.generateAccessToken(authentication, user);
+        String accessToken = jwtTokenProvider.generateAccessToken(authentication, user);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(authentication, user);
 
+        revokeRefreshToken(accessToken);
+        RefreshToken savedRefreshToken = saveUserRefreshToken(refreshToken);
 
-        return token;
+        revokeAllUserAccessTokens(user);
+        saveUserAccessToken(user, accessToken, savedRefreshToken);
+
+        return AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .fullName(user.getFullName())
+                .build();
     }
 }
