@@ -19,4 +19,5 @@ public class WalletDto {
     private String accountNumber;
     private String bankName;
     private Long bikePointId;
+    private BikePointDto bikePoint;
 }
