@@ -22,4 +22,6 @@ public class TransactionDto {
     private double payAmount;
     private String status;
     private LocalDateTime date;
+    private OrderUsingDto orderUsing;
+    private WalletDto wallet;
 }

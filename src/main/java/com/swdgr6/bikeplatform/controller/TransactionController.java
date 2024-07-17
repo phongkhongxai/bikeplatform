@@ -40,12 +40,13 @@ public class TransactionController {
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_OWNER')")
     @PostMapping
-    public ResponseEntity<?> createTransaction(@PathVariable("id")Long id, @RequestParam(value = "amount") double payAmount, @RequestParam(value = "orderUsingId") Long orderUsingId, @RequestParam(value = "walletId") Long walletId ){
+    public ResponseEntity<?> createTransaction(@RequestParam(value = "amount") double payAmount, @RequestParam(value = "orderUsingId") Long orderUsingId, @RequestParam(value = "walletId") Long walletId ){
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setWalletId(walletId);
         transactionDto.setOrderUsingId(orderUsingId);
         transactionDto.setPayAmount(payAmount);
-        return new ResponseEntity<>(transactionDto, HttpStatus.OK);
+        TransactionDto transactionDto1 = transactionService.createTransaction(transactionDto);
+        return new ResponseEntity<>(transactionDto1, HttpStatus.OK);
     }
     @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
