@@ -16,4 +16,6 @@ public class OrderDto {
     private Long userId;
     private Long vehicleId;
     private Long oilProductPackageId;
+    private OilProductPackageDto oilProductPackage;
+    private VehicleDto vehicle;
 }

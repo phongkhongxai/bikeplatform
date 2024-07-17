@@ -24,4 +24,6 @@ public class OrderUsingDto {
     private LocalDateTime dateUpdateUsing;
     private Long orderId;
     private Long bikePointId;
+    private OrderDto order;
+    private boolean isConfirm;
 }

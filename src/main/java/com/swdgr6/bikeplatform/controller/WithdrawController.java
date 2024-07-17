@@ -45,7 +45,7 @@ public class WithdrawController {
     }
 
     @SecurityRequirement(name = "Bear Authentication")
-    @PreAuthorize("hasRole('ROLE_OWNER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("{id}/success")
     public ResponseEntity<?> updateStatusSuccess(@PathVariable("id") Long id){
         WithdrawBikePointDto withdrawBikePointDto1 = withdrawBPService.updateWithdrawBPStatus(id, "Success");
@@ -53,7 +53,7 @@ public class WithdrawController {
     }
 
     @SecurityRequirement(name = "Bear Authentication")
-    @PreAuthorize("hasRole('ROLE_OWNER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("{id}/reject")
     public ResponseEntity<?> updateStatusReject(@PathVariable("id") Long id){
         WithdrawBikePointDto withdrawBikePointDto1 = withdrawBPService.updateWithdrawBPStatus(id, "Rejected");

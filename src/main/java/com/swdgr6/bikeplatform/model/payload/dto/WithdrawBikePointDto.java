@@ -17,4 +17,5 @@ public class WithdrawBikePointDto {
     private double amount;
     private LocalDateTime date;
     private String status;
+    private BikePointDto bikePoint;
 }

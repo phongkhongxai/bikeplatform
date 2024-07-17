@@ -4,6 +4,7 @@ import com.swdgr6.bikeplatform.model.entity.*;
 import com.swdgr6.bikeplatform.model.exception.BikeApiException;
 import com.swdgr6.bikeplatform.model.payload.dto.BikePointDto;
 import com.swdgr6.bikeplatform.model.payload.dto.BikeTypeDto;
+import com.swdgr6.bikeplatform.model.payload.dto.BrandDto;
 import com.swdgr6.bikeplatform.model.payload.requestModel.BikePointUpdatedRequest;
 import com.swdgr6.bikeplatform.model.payload.responeModel.BikePointsResponse;
 import com.swdgr6.bikeplatform.model.payload.responeModel.BikeTypesResponse;
@@ -193,18 +194,26 @@ public class BikePointServiceImpl implements BikePointService {
         BikePoint bikePoint = bikePointRepository.findById(bikePointId)
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND,"Bike Point not found with id: "+bikePointId));
 
-        Set<Brand> brands = new HashSet<>();
+        Set<Brand> currentBrands = bikePoint.getBrands();
+        Set<Brand> brandsToAdd = new HashSet<>();
+
         for (Long brandId : brandIds) {
-            Brand brand = brandRepository.findById(brandId)
-                    .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND,"Brand not found with id: "+brandId));
-            brands.add(brand);
+            boolean brandExists = currentBrands.stream().anyMatch(brand -> brand.getId().equals(brandId));
+            if (!brandExists) {
+                Brand brand = brandRepository.findById(brandId)
+                        .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "Brand not found with id: " + brandId));
+                brandsToAdd.add(brand);
+            }
         }
-        if(!brands.isEmpty()){
-            bikePoint.setBrands(brands);
+        if (!brandsToAdd.isEmpty()) {
+            currentBrands.addAll(brandsToAdd);
+            bikePoint.setBrands(currentBrands);
             bikePointRepository.save(bikePoint);
             return "Added successfully";
         }
-        return "Fail";
+
+        return "No new brands to add";
+
     }
 
     @Override
