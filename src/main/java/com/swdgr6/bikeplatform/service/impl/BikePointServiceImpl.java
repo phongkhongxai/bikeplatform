@@ -4,6 +4,7 @@ import com.swdgr6.bikeplatform.model.entity.*;
 import com.swdgr6.bikeplatform.model.exception.BikeApiException;
 import com.swdgr6.bikeplatform.model.payload.dto.BikePointDto;
 import com.swdgr6.bikeplatform.model.payload.dto.BikeTypeDto;
+import com.swdgr6.bikeplatform.model.payload.dto.BrandDto;
 import com.swdgr6.bikeplatform.model.payload.requestModel.BikePointUpdatedRequest;
 import com.swdgr6.bikeplatform.model.payload.responeModel.BikePointsResponse;
 import com.swdgr6.bikeplatform.model.payload.responeModel.BikeTypesResponse;
@@ -194,7 +195,6 @@ public class BikePointServiceImpl implements BikePointService {
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND,"Bike Point not found with id: "+bikePointId));
 
         Set<Brand> currentBrands = bikePoint.getBrands();
-
         Set<Brand> brandsToAdd = new HashSet<>();
 
         for (Long brandId : brandIds) {
@@ -205,7 +205,6 @@ public class BikePointServiceImpl implements BikePointService {
                 brandsToAdd.add(brand);
             }
         }
-
         if (!brandsToAdd.isEmpty()) {
             currentBrands.addAll(brandsToAdd);
             bikePoint.setBrands(currentBrands);
@@ -214,7 +213,6 @@ public class BikePointServiceImpl implements BikePointService {
         }
 
         return "No new brands to add";
-
 
     }
 

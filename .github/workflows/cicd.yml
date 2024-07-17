@@ -3,7 +3,7 @@ name: Deploy App to Azure App Service
 on:
   push:
     branches:
-      - deploy-to-azure-app-service
+      - deploy-arz
 
 jobs:
   build:
@@ -34,6 +34,6 @@ jobs:
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: bike-platform
+          app-name: bikeoil-platform
           publish-profile: ${{ secrets.azureWebAppPublishProfile }}
           package: '*.jar'
