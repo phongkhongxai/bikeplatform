@@ -25,4 +25,5 @@ public class OrderUsingDto {
     private Long orderId;
     private Long bikePointId;
     private OrderDto order;
+    private boolean isConfirm;
 }

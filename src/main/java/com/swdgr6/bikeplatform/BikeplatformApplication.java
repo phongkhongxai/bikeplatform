@@ -13,8 +13,4 @@ public class BikeplatformApplication {
 		SpringApplication.run(BikeplatformApplication.class, args);
 	}
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
 }
