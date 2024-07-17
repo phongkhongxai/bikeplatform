@@ -109,6 +109,14 @@ public class UserController {
     }
 
     @SecurityRequirement(name = "Bear Authentication")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUserForCustomer(@PathVariable("id") Long id,@Valid @ModelAttribute UserUpdatedRequest bt) {
+        UserDto bt1 = userService.updateUser(id, bt);
+        return new ResponseEntity<>(bt1, HttpStatus.OK);
+    }
+
+    @SecurityRequirement(name = "Bear Authentication")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
