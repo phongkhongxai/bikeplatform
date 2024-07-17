@@ -194,27 +194,18 @@ public class BikePointServiceImpl implements BikePointService {
         BikePoint bikePoint = bikePointRepository.findById(bikePointId)
                 .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND,"Bike Point not found with id: "+bikePointId));
 
-        // Lấy ra danh sách brands hiện tại của bikePoint
         Set<Brand> currentBrands = bikePoint.getBrands();
-
-        // Tạo một set mới để lưu các brand mới sẽ thêm vào
         Set<Brand> brandsToAdd = new HashSet<>();
 
-        // Duyệt qua các brandIds được cung cấp
         for (Long brandId : brandIds) {
-            // Kiểm tra xem brand đã tồn tại trong danh sách hiện tại của bikePoint chưa
             boolean brandExists = currentBrands.stream().anyMatch(brand -> brand.getId().equals(brandId));
             if (!brandExists) {
-                // Nếu brand chưa tồn tại, thêm brand vào danh sách brandsToAdd
                 Brand brand = brandRepository.findById(brandId)
                         .orElseThrow(() -> new BikeApiException(HttpStatus.NOT_FOUND, "Brand not found with id: " + brandId));
                 brandsToAdd.add(brand);
             }
         }
-
-        // Kiểm tra nếu có brand mới để thêm
         if (!brandsToAdd.isEmpty()) {
-            // Thêm các brand mới vào bikePoint
             currentBrands.addAll(brandsToAdd);
             bikePoint.setBrands(currentBrands);
             bikePointRepository.save(bikePoint);
@@ -222,6 +213,7 @@ public class BikePointServiceImpl implements BikePointService {
         }
 
         return "No new brands to add";
+
     }
 
     @Override
