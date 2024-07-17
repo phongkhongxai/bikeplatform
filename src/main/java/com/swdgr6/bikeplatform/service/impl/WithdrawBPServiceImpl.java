@@ -11,6 +11,7 @@ import com.swdgr6.bikeplatform.model.payload.responeModel.TransactionsResponse;
 import com.swdgr6.bikeplatform.model.payload.responeModel.WithdrawBPResponse;
 import com.swdgr6.bikeplatform.repository.BikePointRepository;
 import com.swdgr6.bikeplatform.repository.WithdrawBPRepository;
+import com.swdgr6.bikeplatform.service.WalletService;
 import com.swdgr6.bikeplatform.service.WithdrawBPService;
 import org.checkerframework.checker.units.qual.A;
 import org.modelmapper.ModelMapper;
@@ -37,6 +38,8 @@ public class WithdrawBPServiceImpl implements WithdrawBPService {
     private ModelMapper modelMapper;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private WalletService walletService;
 
     @Override
     public WithdrawBikePointDto createWithdrawBikePoint(WithdrawBikePointDto withdrawBikePointDto) {
@@ -72,11 +75,11 @@ public class WithdrawBPServiceImpl implements WithdrawBPService {
         WithdrawBikePoint withdrawBikePoint = withdrawBikePointOptional.get();
         withdrawBikePoint.setStatus(status);
         if(status.equalsIgnoreCase("Success")){
+            walletService.updateWalletPlusCash(withdrawBikePoint.getBikePoint().getWallet().getId(),-withdrawBikePoint.getAmount());
             emailService.sendSuccessWithdrawEmail(withdrawBikePoint.getBikePoint().getUser().getEmail(),withdrawBikePoint.getBikePoint().getUser().getFullName(),withdrawBikePoint.getAmount(), String.valueOf(withdrawBikePoint.getDate()));
         }
         if(status.equalsIgnoreCase("Rejected")){
             emailService.sendFailureWithdrawEmail(withdrawBikePoint.getBikePoint().getUser().getEmail(),withdrawBikePoint.getBikePoint().getUser().getFullName(),withdrawBikePoint.getAmount(), String.valueOf(withdrawBikePoint.getDate()), "Lỗi không xác định");
-
         }
         return modelMapper.map(withdrawBPRepository.save(withdrawBikePoint), WithdrawBikePointDto.class);
     }

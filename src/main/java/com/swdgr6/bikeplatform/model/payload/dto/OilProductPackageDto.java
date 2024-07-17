@@ -37,4 +37,5 @@ public class OilProductPackageDto {
 
     @NotNull(message = "Oil product ID should not be null!")
     private Long oilProductId;
+    private OilProductDto oilProduct;
 }
