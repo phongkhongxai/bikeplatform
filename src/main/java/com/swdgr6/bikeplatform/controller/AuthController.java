@@ -50,8 +50,8 @@ public class AuthController {
     public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> tokenRequest) {
         String idToken = tokenRequest.get("idToken");
         try {
-            String token = authService.authenticateWithGoogle(idToken);
-            return ResponseEntity.ok(new AuthenticationResponse(token, null, null));
+            AuthenticationResponse token = authService.authenticateWithGoogle(idToken);
+            return ResponseEntity.ok(token);
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
             return ResponseEntity.status(401).body("Authentication failed: Invalid Firebase token");

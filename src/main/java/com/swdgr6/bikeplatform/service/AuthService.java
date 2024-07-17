@@ -13,5 +13,5 @@ public interface AuthService {
     AuthenticationResponse login(LoginDto loginDto);
     String signup(SignupDto signupDto);
     AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
-    String authenticateWithGoogle(String idToken) throws IOException, FirebaseAuthException;
+    AuthenticationResponse authenticateWithGoogle(String idToken) throws IOException, FirebaseAuthException;
 }

@@ -103,7 +103,8 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus("Available");
         order.setChangeTimes(oilProductPackage.getChangeTimes());
         order.setDelete(false);
-        return modelMapper.map(orderRepository.save(order), OrderDto.class);
+        Order order1 = orderRepository.save(order);
+        return modelMapper.map(order1, OrderDto.class);
     }
 
     @Override
