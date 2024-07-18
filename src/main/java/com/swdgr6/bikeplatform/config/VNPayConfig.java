@@ -11,7 +11,7 @@ public class VNPayConfig {
     @Getter
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     @Getter
-    public static String vnp_ReturnUrl = "http://localhost:8080/no-auth/payment/vn-pay-callback";
+    public static String vnp_ReturnUrl = "https://bikeoil-platform.azurewebsites.net/no-auth/payment/vn-pay-callback";
     @Getter
     public static String vnp_TmnCode = "UI4YDW2A";
     @Getter
